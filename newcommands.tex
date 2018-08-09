@@ -1,0 +1,83 @@
+\newcommand{\afac}[1]{\noindent \textcolor{red}{{\small \sc #1}}}
+
+\usepackage{xspace}
+%units
+\usepackage[squaren,Gray,mediumqspace,thinspace,textstyle]{SIunits}
+
+\usepackage[permil]{overpic}
+
+\usepackage{textcomp}
+\usepackage[absolute,overlay]{textpos}
+
+\newcommand{\egamma}{E_{\gamma}}
+\newcommand{\unitMass}{\giga\electronvolt/c^2}
+\newcommand{\unitMom}{\giga\electronvolt/c}
+\newcommand{\GeV}{\giga\electronvolt}
+\newcommand{\TeV}{\tera\electronvolt}
+\newcommand{\fb}{\femto\barn}
+\newcommand{\pb}{\pico\barn}
+\newcommand{\invmub}{\micro\reciprocal\barn}
+\newcommand{\invpb}{\pico\reciprocal\barn}
+\newcommand{\invfb}{\femto\reciprocal\barn}
+\newcommand{\invnb}{\nano\reciprocal\barn}
+\newcommand{\lumi}{\ensuremath{\mathcal{L}}}
+\newcommand{\lumiunit}{\centi\meter\rpsquared\usk\reciprocal\second}
+\newcommand{\pomeron}{\mathbb{P}}
+\newcommand{\xp}{x_\pomeron}
+\newcommand{\dkap}{\ensuremath{\Delta\kappa^{\gamma}}}
+\newcommand{\kap}{\ensuremath{\kappa^{\gamma}}}
+\newcommand{\lam}{\ensuremath{\lambda^{\gamma}}}
+\newcommand{\aOw}{\ensuremath{a_0^W}}
+\newcommand{\aOz}{\ensuremath{a_0^Z}}
+\newcommand{\aCw}{\ensuremath{a_C^W}}
+\newcommand{\aCz}{\ensuremath{a_C^Z}}
+\newcommand{\aOwL}{\ensuremath{a_0^W/\Lambda^2}}
+\newcommand{\aOzL}{\ensuremath{a_0^Z/\Lambda^2}}
+\newcommand{\aCwL}{\ensuremath{a_C^W/\Lambda^2}}
+\newcommand{\aCzL}{\ensuremath{a_C^Z/\Lambda^2}}
+% \newcommand{\Lcutoff}{\ensuremath{\Lambda_{\text{cutoff}}}}
+\newcommand{\Lcutoff}{\ensuremath{\Lambda}}
+\newcommand{\wwgamma}{WW\gamma}
+\newcommand{\missET}{\ensuremath{\not\!\!E_T}}
+\newcommand{\etmiss}{\ensuremath{\not\!\!E_T}}
+\newcommand{\WWgg}{\ensuremath{WW\gamma\gamma}}
+\newcommand{\ggWW}{\ensuremath{WW\gamma\gamma}}
+\newcommand{\dd}{\mathop{}\mathopen{}\text{d}}
+
+\newcommand{\gpU}[1]{\ensuremath{\text{U}({#1})}}
+\newcommand{\gpSU}[1]{\ensuremath{\text{SU}({#1})}}
+\newcommand{\gpO}[1]{\ensuremath{\text{O}({#1})}}
+\newcommand{\gpSO}[1]{\ensuremath{\text{SO}({#1})}}
+
+\newcommand{\DO}{D\O{}\xspace}
+
+\newcommand{\ith}{\textsuperscript{th}}
+\newcommand{\st}{\textsuperscript{st}}
+\newcommand{\nd}{\textsuperscript{nd}}
+\newcommand{\rd}{\textsuperscript{rd}}
+
+% \myfig[width=3cm]{label}{images/Chap1/myfig.pdf}{The capture of my figure.}
+\newcommand{\myfig}[4][width=0.7\textwidth]{%
+\begin{center}
+ \begin{figure}
+  \includegraphics[#1]{#3}
+  
+ \caption{\label{#2} #4}
+ \end{figure}
+\end{center}
+}
+
+\newcommand\FrameText[1]{%
+  \begin{textblock*}{\paperwidth}(0pt,33pt)
+    \raggedleft \small #1\hspace{.5em}
+  \end{textblock*}}
+
+\newcommand{\myincgr}[4]{
+     \begin{overpic}[#1]{#2}
+     \put(#3){#4}
+     \end{overpic}}
+\newcommand{\myincgrduo}[6]{
+     \begin{overpic}[#1]{#2}
+     \put(#3){#4}
+     \put(#5){#6}
+     \end{overpic}}
