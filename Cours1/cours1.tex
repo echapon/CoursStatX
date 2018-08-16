@@ -144,7 +144,8 @@ $\to$ confusion on the ``usual'' and ``statistician'' meanings of the word confi
  \end{tabular}
  \end{center}
  
- Also, statistics is a field of mathematics, not a quantifier of data: avoid wishing for ``more statistics''...
+ (Side note: statistics is a field of mathematics, not a quantifier of data: avoid wishing for ``more statistics''...)
+ 
 
 \end{frame}
 
@@ -300,7 +301,7 @@ inference and to inform informal application.
  \begin{block}{Definition}
  Frequentist probability is defined in an empiric way. Given a random variable $X$ and a sample space $\Omega$, we repeat the experiment $N$ times and measure the outcome of $X$.
  
- For $A subset \Omega$, and measure $n$ times $X \in A$, we then define 
+ For $A \subset \Omega$, and if we measure $n$ times $X \in A$, we then define 
  
  $$P(A) = \lim_{N \to \infty} \frac{n}{N}$$
 \end{block}
@@ -340,7 +341,7 @@ inference and to inform informal application.
   $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
  \end{block}
  
- \uncover<2>{\begin{block}{Conditional probability and independence}
+ \uncover<2->{\begin{block}{Conditional probability and independence}
  \begin{itemize}
   \item<2-> We define the conditional probability of $A$ given $B$ (i.e. of $x \in A$, given that already $x \in B$), written $P(A|B)$. Then:
   
@@ -578,10 +579,320 @@ simplistic for ``deciding'' in important situations.
 
 \begin{frame}
  \frametitle{Multi-dimensional variable}
+ 
+ Example: $X = (x,y,z)$. 
+ Then $P(x \in [x_0, x_0 + \dd x], y \in [y_0, y_0 + \dd y], z \in [z_0, z_0 + \dd z]) = f(x_0,y_0,z_0) \dd x \dd y \dd z$ where $f$ is the pdf.
+ 
+ \begin{block}{Definition: marginal pdf}
+  $$f_X (x) = \int \dd y^\prime \dd z^\prime\, f(x,y^\prime,z^\prime)$$
+  
+  $f_X$ is a \textbf{projection} of $f$
+ \end{block}
+ 
+ \begin{block}{Definition: conditional pdf}
+  $$f_C (x, y_0, z_0) = \frac{f(x,y_0,z_0)}{\int \dd x^\prime f(x^\prime, y_0, z_0)}$$
+  
+  $f_C$ is a \textbf{``section''} of $f$
+ \end{block}
+
+ \begin{block}{Definition: independent variables}
+  Given two random variables $X$ and $Y$, \\
+  $X$ and $Y$ are independent iff $f(x,y) = f_X(x) f_Y(y)$.
+ \end{block}
+
+
+ 
 \end{frame}
 
 \begin{frame}
  \frametitle{Change of variable}
+ 
+ Let $f(\vec{x})$ be a pdf and a change of variables $h: \vec{x} \mapsto \vec{y} = h(\vec{x})$, $[\vec{x}, \vec{x} + \dd\vec{x}] \to [\vec{y}, \vec{y} + \dd\vec{y}]$
+ 
+ \vspace{10pt}
+ 
+ \structure{What is the pdf of $\vec{y}$: $g(\vec{y})$?}
+ 
+ \uncover<2>{\only<2>{
+ \begin{block}{If $x$ and $y$ are scalars, and $h$ bijective}
+  \begin{eqnarray}
+   g(y) \dd y & = & f(x) \dd x \nonumber \\
+   g(y) & = & f(x) \left| \frac{\dd x}{\dd y}\right| = \frac{f(x)}{|h^\prime (x)|} \nonumber \\
+   \structure{g(y)} & \structure{=} & \structure{\frac{f(x)}{\left| \frac{\dd y}{\dd x} \right|}}   
+  \end{eqnarray}
+  
+  NB: $g$ is not defined where $h^\prime(x) = 0$.
+
+ \end{block}
+
+ }}
+ 
+ \only<3>{
+ \begin{block}{If $x$ and $y$ are scalars, and $h$ bijective}
+  Several $[x_i,x_i+\dd x]$ correspond to a given $[y,y+\dd y]$
+  
+  Then \structure{$$g(y) = \sum{i, h(x_i) = y} \frac{f(x_i)}{|h^\prime(x_i)|}$$}
+ \end{block}
+ 
+ Examples:
+ 
+ \begin{itemize}
+  \item $$y = h(x) = x^2\quad \longrightarrow \quad g(y) = \frac{f(\sqrt{y}) + f(-\sqrt{y})}{2\sqrt{y}}$$
+  \item $$y = h(x) = |x|\quad \longrightarrow \quad g(y) = \frac{f(y) + f(-y)}{1}$$
+ \end{itemize}
+
+
+ }
+ 
+ \only<4>{
+ \begin{block}{Case of multiple dimensions and a bijective $h$}
+  \structure{$$g(\vec{y}) = \frac{f(\vec{x})}{\left| \det \left( \frac{\partial \vec{h}}{\partial \vec{x}} \right) \right|}$$}
+  
+  The denominator is the jacobian of the transformation.
+ \end{block}
+
+ }
+ 
+\end{frame}
+
+\section{Properties of pdfs}
+
+\begin{frame}
+ \frametitle{Properties of pdfs}
+ 
+ $$X,\qquad f(x),\qquad x \in \Omega$$
+  
+\end{frame}
+
+\begin{frame}
+ \frametitle{Properties of pdfs}
+ 
+ \begin{block}{Expectation of a function, $g(X)$}
+  
+  $$E(g) = \int_\Omega g(X) f(X) \dd X$$
+  
+  {\footnotesize NB: in the discrete case, $\int \leftarrow \sum$, $f(x) \dd x \leftarrow p_i (x_i)$ }
+ \end{block}
+ 
+ \begin{block}{Mean $\mu$ ($= \bar{X} = \langle X \rangle$)}
+ 
+  $$\mu = E(X) = \int X f(X) \dd X$$
+ \end{block}
+ 
+ \end{frame}
+
+\begin{frame}
+ \frametitle{Properties of pdfs}
+
+ \begin{block}{Variance $V$, standard deviation $\sigma$}
+  \begin{eqnarray}
+   V = \sigma^2 & \equiv & E \left( (X-\mu)^2 \right) \nonumber\\
+   & = & E \left( X^2 - 2 \mu X + \mu^2\right) \nonumber\\
+   \structure{V} & \structure{=} & \structure{E\left( x^2 \right) - \mu^2} \nonumber
+  \end{eqnarray}
+
+ \end{block}
+
+ NB: not always defined (e.g. for the Breit-Wigner, aka Cauchy, distribution: undefined mean, infinite variance).
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Moments}
+ 
+ \begin{block}{Definition}
+  \begin{itemize}
+   \item Central moment: $E\left[ (X-\mu)^n \right]$
+   \item Algebaric moment: $E\left[ X^n \right]$
+  \end{itemize}
+
+ \end{block}
+
+ Particular cases: 
+ 
+ \begin{itemize}
+  \item $n=3$ central moment: \structure{skewness}. Measures the left-right asymmetry of the pdf.
+  \item $n=4$ central moment: \structure{kurtosis}. Measures the size of the tails of the distribution (if positive, then larger tails than a Gaussian).
+ \end{itemize}
+
+ 
+\end{frame}
+
+\begin{frame}
+ \frametitle{Characteristic function of a pdf}
+ 
+ \begin{block}{Definition}
+  \begin{eqnarray}
+   \Phi_X (t) & \equiv & E(e^{itx}) \qquad t \in \mathbb{R} \nonumber \\
+   & = & \int_\Omega e^{itx} f(x) \dd x \qquad \text{(continuous)}\nonumber \\
+   & = & \sum_k p_k e^{i t x_k}\qquad \text{(discrete)} \nonumber 
+  \end{eqnarray}
+
+ \end{block}
+ 
+ If the pdf is continuous, then 
+ $$f(x) = \frac{1}{2 \pi} \int_{-\infty}^{+\infty} \Phi_X(t) e^{-itx} \dd t$$
+ 
+ Properties: $\Phi_X (0) = 0$, $|\Phi_X(t)| \leq 1 \quad \forall t$
+ 
+ For $X,Y$ two independent variables: $\Phi_{X+Y}(t) = \Phi_X(t) \Phi_Y(t)$
+
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Taylor development of the characteristic function}
+ 
+ \begin{block}{}
+  $$\Phi_X(t) = E(e^{itX}) = E \left( \sum_{n=0}^{+\infty} \frac{(itX)^p}{n!} \right) = \sum_{n=0}^{+\infty} \frac{(it)^n}{n!} E(X^n) $$
+  
+  where $E(X^n)$ is the $n$\ith moment
+ \end{block}
+ 
+ % I skip here a discussion from the ED class
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Case of several variables}
+ 
+ \begin{block}{Covariance $C(X,Y)$}
+  $$C(X,Y) \equiv E \left( (X-\mu_X) (Y-\mu_Y) \right) = E(XY) - E(X) E(Y)$$
+ \end{block}
+ 
+ \begin{block}{Correlation coeffcient (or Pearson coefficient)}
+  $$\rho(X,Y) \equiv \frac{C(X,Y)}{\sigma_X \sigma_Y}$$
+ \end{block}
+ 
+ \begin{block}{Schwartz lemma}
+  $|\rho(X,Y)| \leq 1$
+ \end{block}
+
+ Demo of the Schwartz lemma:
+ 
+ $$\forall \alpha, V(\alpha X + Y) = \alpha^2 V(X) + V(Y) + 2 \alpha C(X,Y) \geq 0$$
+ 
+ This quadratic form can have one solution at most, hence its determinant is $\leq 0$: 
+ 
+ $$C(X,Y)^2 - V(X) V(Y) \leq 0 \quad \text{(QED)}$$ 
+
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Covariance: special cases}
+ 
+ \begin{block}{Independent variables}
+  $$X,Y \text{ independent} \Rightarrow C(X,Y) =0, \rho(X,Y) = 0$$
+  
+  NB: the opposite is not true (can have $C(X,Y)=0$ but $X$ and $Y$ not independent).
+ \end{block}
+ 
+ \begin{columns}
+  \begin{column}{0.27\textwidth}
+   \includegraphics[width=\textwidth]{circle}
+
+   \centering
+   $\rho=0$,\\ not independent
+  \end{column}
+  \begin{column}{0.27\textwidth}
+   \includegraphics[width=\textwidth]{uncor}
+   
+   \centering
+   $\rho=0$,\\ independent
+  \end{column}
+  \begin{column}{0.27\textwidth}
+   \includegraphics[width=\textwidth]{cor}
+   
+   \centering
+   $\rho=1$,\\ complete correlation
+  \end{column}
+  \begin{column}{0.27\textwidth}
+   \includegraphics[width=\textwidth]{anticor}
+   
+   \centering
+   $\rho=-1$,\\ complete anti-correlation
+  \end{column}
+ \end{columns}
+
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Covariance matrix}
+ 
+ \begin{block}{}
+  $$\vec{X} = (X_1, \dots, X_N)$$
+  
+  $$V_{\vec{X}} = \begin{pmatrix}
+                   \sigma_1^2 & C(X_1,X_2) & \cdots & C(X_1,X_N) \\
+                   C(X_1,X_2) & \sigma_2^2 & \cdots & C(X_2,X_N) \\
+                   \vdots & \ddots & \ddots &  \vdots \\
+                   \vdots & \ddots & \ddots &  \sigma_N^2
+                   \end{pmatrix}
+$$
+ \end{block}
+ 
+ \begin{block}{Properties}
+  \begin{itemize}
+   \item The covariance matrix is symmetric.
+   \item All its eigen values are positive.
+  \end{itemize}
+
+ \end{block}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Covariance matrix: change of variables}
+ 
+ \begin{block}{Linear change of variables $\vec{Z} = A \vec{X} + B$}
+  $$V_{\vec{Z}} = A\, V_{\vec{X}}\, ^t A$$
+ \end{block}
+ 
+ \begin{block}{}
+  $$E \left( \sum_{i=1}^{N} a_i X_i \right) = \sum_{i=1}^{N} a_i E(X_i)$$
+  $$V \left( \sum_{i=1}^{N} a_i X_i \right) = \sum_{i=1}^{N} a_i V(X_i) + 2 \sum_{i=1}^{N-1} \sum_{j=i+1}^{N} a_i a_j C(X_i,X_j)$$
+ \end{block}
+
+ \begin{block}{Nonlinear change of variables $\vec{Y} = \vec{H} (\vec{X})$}
+  There is no exact formula for $V_{\vec{Y}}$. However,
+  
+  $$V_{\vec{Y}} = D V_{\vec{X}} D^{-1}$$
+  
+  where $D$ is the matrix of the derivatives (which determinant is the Jacobian), evaluated in $\vec{X}_0 = E(\vec{X})$.
+ \end{block}
+
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Application: sample mean}
+ 
+ 
+ 
+  Assume $N$ realisations of $X$ for $N$ independent trials. For each trial, we have a pdf $f(x)$ with mean $\mu$ and variance $\sigma^2$. 
+  
+  Define $\bar{X} = \frac{1}{N} \sum_{i=1}^{N} X_i$
+  
+  \begin{itemize}
+   \item $E(\bar{X}) = \frac{1}{N} \sum_i E(X_i) = \frac{1}{N} N \mu = \mu$ 
+   \item $V(\bar{X}) = \frac{\sigma^2}{N}$
+  \end{itemize}
+ 
+
+\end{frame}
+
+\section{Discrete laws}
+
+\begin{frame}
+ \frametitle{Outline}
+ 
+ \tableofcontents[current]
+\end{frame}
+
+\begin{frame}
+ \frametitle{Binomial law}
 \end{frame}
 
 
