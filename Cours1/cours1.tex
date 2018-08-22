@@ -893,8 +893,251 @@ $$
 
 \begin{frame}
  \frametitle{Binomial law}
+ 
+ Let $X$ be a random variable, with $x \in \Omega$, and let $A \subset \Omega$, with $P(A) = p$
+ 
+ We repeat the experiment $N$ times, and count $n$ the number of times that we got $x \in A$. $n$ is a random variable and follows a binomial law.
+ 
+ \begin{block}{Binomial law}
+  $$P(n) = B(n;N,p) = \left( ^N_n \right) p^n (1-p)^{N-n}$$
+ \end{block}
+ 
+ \begin{block}{Properties}
+  \begin{itemize}
+   \item Mean: $E(n) = pN$
+   \item Variance: $V(n) = N p (1-p)$
+  \end{itemize}
+ \end{block}
+
 \end{frame}
 
+\begin{frame}
+ \frametitle{Multinomial law}
+ 
+ Let there be $K$ exclusive realisations: $Q_1, Q_2, \dots, Q_K$, with respective probabilities $p_1, p_2, \dots, p_K$ ($\sum_{i=1}^K p_i = 1$)
+ 
+ We repeat the experiment $N$ times, and count $n_1$ in $Q_1$, $n_2$ in $Q_2$, \dots, $n_K$ in $Q_K$.
+ 
+ \begin{block}{Multinomial law}
+  $$P(n_1,n_2,\dots,n_K) = \frac{N!}{n_1! \dots n_K!} p_1^{n_1} \dots p_K^{n_K} = \frac{N!}{\prod_{i=1}^{K} n_i!} \prod_{i=1}^K p_i^{n_i}$$
+  
+  Parameters: $N$, $\{p_i\}_{i=1..K}$
+ \end{block}
+ 
+ Example: histogram with $K$ bins and $N$ events ($N$ \textbf{fixed})
+
+ \begin{block}{Properties}
+  \begin{itemize}
+   \item Covariance: $C(n_i,n_j) = -N p_i p_j$
+   \item Correlation: $\rho (n_i,n_j) = \sqrt{\frac{p_i p_j}{(1-p_i)(1-p_j)}}$
+  \end{itemize}
+ \end{block}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Poisson law}
+ 
+ Typical case: probability of observing $n$ events during $\Delta t$, knowing that events come with a rate $\mu$. 
+ \structure{It is the limit of the binomial law, with $N \to \infty$, $p \to 0$, $Np = \mu$}
+ 
+ \begin{block}{Poisson law}
+  $$P_\mu(n) = \frac{\mu^n e^{-\mu}}{n!}$$
+ \end{block}
+ 
+ \begin{block}{Properties}
+  \begin{itemize}
+   \item Mean: $E(n) = \mu$
+   \item Variance: $V(n) = \mu$ (and standard deviation $\sigma(n) = \sqrt{\mu}$)
+  \end{itemize}
+ \end{block}
+
+ Example: radiactive sources, with $\nu$ counts per unit time. During an infinitesimal $\delta t$:
+ 
+ \begin{itemize}
+  \item $p(1) = \nu \delta t$ 
+ \end{itemize}
+ 
+ $$P(n) = \frac{(\nu t)^n e^{-\nu t}}{n!}$$
+
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Sum of Poisson laws}
+ 
+ Sum of independent Poisson laws:
+ 
+ \begin{itemize}
+  \item $N = n_1 + \dots + n_K$
+  \item $P(n_1,\mu_1) \dots P(n_k,\mu_K)$
+ \end{itemize}
+ 
+ $$P(N) = P_{\mu = \mu_1 + \dots + \mu_K}(N)$$
+ 
+ The sum of Poisson laws is a Poisson law which mean is the sum of the individual means.
+
+\end{frame}
+
+\section{Continuous laws}
+
+\begin{frame}
+ \frametitle{Outline}
+ 
+ \tableofcontents[current]
+\end{frame}
+
+\begin{frame}
+ \frametitle{Exponential law}
+ 
+ \begin{block}{Exponential law}
+  $f_\tau (t) = \frac{1}{\tau} e^{-t/\tau}$
+ \end{block}
+ 
+ Example: decay time of a particle
+ 
+ \begin{block}{Properties}
+  \begin{itemize}
+   \item Mean: $E(t) = \tau$
+   \item Variance: $V(t) = \tau$
+  \end{itemize}
+
+ \end{block}
+
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Normal law (Gaussian)}
+ 
+ \begin{block}{Normal law}
+  $$f_{\mu,\sigma} (x) = \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
+ \end{block}
+ 
+ \begin{block}{Properties}
+  \begin{itemize}
+   \item Mean: $E(x) = \mu$
+   \item Variance: $V(x) = \sigma^2$
+   \item All moments of order $>2$ are zero. In particular: skewness $=0$, kurtosis $=0$
+  \end{itemize}
+ \end{block}
+
+ The cumulative function is called the error function: \structure{$F(x) = \text{erf}(x)$}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Normal law: some numbers}
+ 
+ \begin{center}
+  \begin{tabular}{c|c}
+   FWHM\footnote{Full Width Half Maximum} & $\approx 2 \times 1.176 \sigma$ \\
+   $P(-\sigma \leq x-\mu \leq \sigma$ & $\approx 0.68$ \\
+   $P(-1.64 \sigma \leq x-\mu \leq 1.64 \sigma$ & 0.90 \\
+   $P(-1.96 \sigma \leq x-\mu \leq 1.96 \sigma$ & 0.95 \\
+   $P(-3.24 \sigma \leq x-\mu \leq 3.24 \sigma$ & 0.999 
+  \end{tabular}
+
+ \end{center}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Normal law of several variables}
+ 
+ \begin{block}{Normal law of $K$ variables}
+  $$f(\vec{X}) = \frac{1}{2\pi^{K/2} |\det V|^{1/2}} \exp \left( -\frac{1}{2} \left(\vec{X}-\vec{\mu}\right) V^{-1}  \left(\vec{X}-\vec{\mu}\right)^\text{T} \right)$$
+  
+  where $V$ is a positive definite matrix.
+ \end{block}
+ 
+ \begin{columns}
+  \begin{column}{0.6\textwidth}
+   
+ 
+ \begin{block}{Properties}
+  \begin{itemize}
+   \item Mean: $E(\vec{X}) = \vec{\mu}$
+   \item Covariance matrix: $C(\vec{X}) = V$
+  \end{itemize}
+ \end{block}
+ 
+  \textbf{Careful!} 1D confidence intervals ($P(|X-\mu|<xx\sigma) = yy$) cannot be taken directly from the 1D case.
+  \end{column}
+  \begin{column}{0.4\textwidth}
+   \includegraphics[width=\textwidth]{../figures/Multivariate_normal_sample.pdf}
+  \end{column}
+
+ \end{columns}
+ 
+\end{frame}
+
+\begin{frame}
+ \frametitle{Uniform distribution}
+ 
+ \begin{block}{Uniform distribution}
+  For $x \in [a,b]$:
+  
+  $$f(x) = \frac{1}{b-a}$$
+ \end{block}
+
+ \begin{block}{Properties}
+  \begin{itemize}
+   \item Mean: $E(x) = \frac{b-a}{2}$
+   \item Variance: $V(x) = \left(\frac{b-a}{12}\right)^2$, i.e. standard deviation $\sigma(x) = \frac{b-a}{\sqrt{12}}$
+  \end{itemize}
+
+ \end{block}
+
+ 
+\end{frame}
+
+\begin{frame}
+ \frametitle{$\chi^2$ distribution}
+ 
+ \begin{block}{$\chi^2$ distribution}
+  $$f(x) = \frac{\frac{1}{2} \left( \frac{x}{2} \right)^{\frac{N}{2}-1} e^{-\frac{x}{2}}}{\Gamma(N/2)}$$
+ \end{block}
+  
+ \begin{columns}
+  \begin{column}{0.6\textwidth}
+   
+ \begin{block}{Properties}
+  \begin{itemize}
+   \item Mean: $E(x) = N$
+   \item Variance: $V(x) = 2N$
+  \end{itemize}
+ \end{block}
+ 
+ Example: sum of independent variables normally distributed ($t_N = \sum_{i=1}^{N} x_i^2$)
+  \end{column}
+  \begin{column}{0.4\textwidth}
+   \includegraphics[width=\textwidth]{../figures/Chi-square_distributionPDF.png}
+  \end{column}
+
+ \end{columns}
+
+
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{Other distributions}
+ 
+ \begin{description}
+  \item[Cauchy distribution] (or Breit-Wigner): wider than a Gaussian, with undefined moments
+  \item[Student's $t$]: kurtosis $>0$ (Cauchy is a special case of Student's $t$)
+ \end{description}
+
+\end{frame}
+
+\section{Asymptotic theorems}
+
+\begin{frame}
+ \frametitle{Outline}
+ 
+ \tableofcontents[current]
+\end{frame}
 
 
 \end{document}
