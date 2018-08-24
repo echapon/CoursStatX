@@ -1139,6 +1139,57 @@ $$
  \tableofcontents[current]
 \end{frame}
 
+\begin{frame}
+ \frametitle{Asymptotic approach}
+ 
+ Go back to the binomial law: $$B_{N,p}(n) = \frac{N!}{n!(N-n)!} p^n (1-p)^n$$
+ 
+ Let us define $f_N = \frac{n}{N}$
+ 
+ Then: $\langle f_N \rangle = \frac{pN}{N} = p$, $\sigma^2_{f_N} = \frac{p(1-p)}{N} \xrightarrow[N \to +\infty]{} 0$
+ 
+ \begin{block}{Frequentist probability}
+  $$\text{Frequentist } p \equiv \lim_{N \to \infty} \frac{n}{N}$$
+ \end{block}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Law of large numbers}
+ 
+ \begin{block}{Definition: convergence in probability}
+  A sequence $\{X_n\}$ of random variables converges in probability towards the random variable $X$ if for all $\varepsilon > 0$
+
+    $$ \lim _{n\to \infty }P \left( |X_{n}-X|>\varepsilon \right)=0$$
+ \end{block}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Law of large numbers}
+ 
+ Let $\{X_N\}$ be a sequence of random variables, such that $\forall i, \langle x_i \rangle = \mu$ and $\sigma^2_i = \sigma^2$. 
+ 
+ We also define the sample mean
+ $\bar{x} \equiv \sum_{i=1}^N \frac{x_i}{N}$
+ 
+ \begin{block}{Weak law of large numbers}
+  $$\text{If } \lim_{N \to \infty} \left( \frac{1}{N^2} \sum_{i=1}^N \sigma^2_i\right) = 0\text{, then } \bar{x} \xrightarrow[N \to \infty]{} \mu$$
+  
+  where the convergence is ``in quadratic mean''
+ \end{block}
+ 
+ \begin{block}{Strong law of large numbers}
+  $$\text{If } \lim_{N \to \infty} \left( \frac{1}{N^2} \sum_{i=1}^N \sigma^2_i\right)\text{ stays finite, then } \bar{x} \xrightarrow[N \to \infty]{} \mu$$
+  
+  where the convergence is ``almost certainly''
+ \end{block}
+ 
+ Both imply convergence in probability.
+
+\end{frame}
+
+
 
 \end{document}
 
