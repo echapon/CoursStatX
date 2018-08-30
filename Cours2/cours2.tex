@@ -1,0 +1,174 @@
+\documentclass[9pt]{beamer}
+
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+% \usepackage{beamerthemeplain}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[english]{babel}
+\usepackage{fontenc}
+% \usepackage{verbatim}
+\usepackage{graphics}
+ 
+\usepackage{textcomp}
+\usepackage[absolute,overlay]{textpos}
+
+\usepackage{wasysym}
+
+\usepackage{slashed}
+\usepackage{array}
+
+\usetheme{CNRScolors}
+
+\input{../newcommands.tex}
+\input{../custom-definitions.tex}
+
+\graphicspath{ {../figures/}{./} }
+
+\setbeamertemplate{navigation symbols}{}
+
+ \newcolumntype{x}[1]{%
+>{\centering\hspace{0pt}}p{#1}}%
+\newcommand{\tn}{\tabularnewline}
+
+\date[Stat2]{Sept. 27, 2018}
+\title{Methods of statistical analysis and simulation}
+\subtitle{Cours 1}
+\author[E. Chapon]{Émilien Chapon}
+% \institute[(CERN)]{CERN}
+% \logo{\includegraphics[height=0.6cm]{../../CMS-Color-Label.pdf}\hspace{1.05\textwidth}\includegraphics[height=0.6cm]
+% {../../LogoBadge.pdf} }
+
+\begin{document}
+
+{
+\setbeamertemplate{footline}{}
+\setbeamertemplate{headline}{}
+% \logo{\includegraphics[height=1.2cm]{../../CMS-Color-Label.pdf}
+% \hspace{0.94\textwidth}\includegraphics[height=1.2cm]{../../LogoBadge.pdf}}
+
+\begin{frame}
+ \maketitle
+ 
+%  \setcounter{framenumber}{0}
+\end{frame}
+}
+
+\begin{frame}
+ \frametitle{Outline}
+ 
+ \tableofcontents
+\end{frame}
+
+\section{Point estimation}
+
+\begin{frame}
+ \frametitle{Parameter estimation}
+ 
+ Let $X$ be a random variable of pdf $f(x;\theta_0)$, with $\theta_0$ unknown. We draw $N$ independent trials of $X$, $\{x_1,\dots,x_N\}$.
+ 
+ \begin{block}{Definition: statistic}
+  Any random variable $T$ that is a function of the data, $T = T(X1,\dots,X_N)$, is called a \textbf{statistic}.
+ \end{block}
+ 
+ An \textbf{estimator} is a statistic that can be used to estimate $\theta_0$. It can have the following properties:
+ 
+ \begin{description}
+  \item[unbiased]: if $\langle t_N \rangle = \theta_0$ (otherwise the bias is $\langle t_N \rangle - \theta_0 = b_N$)
+  \item[convergent] or consistent: e.g. consistency in probability, $\forall \epsilon>0, \forall \eta>0, \exists N_0 / \forall N>N_0, P(|t_N - \theta_0|>\epsilon)<\eta$
+  \begin{itemize}
+   \item NB: The law of large numbers is equivalent to the statement that the sample mean is a consistent estimator of the parent mean.
+  \end{itemize}
+  \item[optimal]: if $t_N$ is unbiased and has the smallest possible variance
+  \item[efficient]: if $t_N$ is unbiased and that its variance $V(t_N) \xrightarrow[N\to\infty]{} \text{minimum variance}$ (this property can be only asymptotic)
+  \item[robust]: if it does not depend on a hypothesis on the pdf
+ \end{description}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Usual methods of constructing consistent estimators}
+ 
+ We can use the law of large numbers:
+ 
+ $$\frac{1}{N} \sum_{i=1}^N a(X_i) \xrightarrow[N\to\infty]{} E[a(X)] = \int a(X)f(X,\theta_0)\dd X$$
+ 
+ We will see:
+ 
+ \begin{itemize}
+  \item the moments method
+  \item the maximum likelihood method
+ \end{itemize}
+
+ 
+\end{frame}
+
+\begin{frame}
+ \frametitle{The moments method}
+ 
+ Let $a(X)$ such that $E[a(X)] = \int a(X) f(X;\theta) \dd X = h(\theta)$ where $h$ is known. 
+ 
+ If $h$ is invertible, we can find the true value of $\theta$: 
+ $\theta_0 = h^{-1}(E[a]) = h^{-1}\left(\int a(X) f(X;\theta) \dd X\right)$
+ 
+ The estimator is then:
+ 
+ $$\hat{\theta} = h^{-1} \left( N^{-1} \sum_{i=1}^N a(x_i) \right)$$
+ 
+ NB: $\hat{\theta}$ does not directly depend on $f$, only on the $x_i$.
+\end{frame}
+
+\begin{frame}
+ \frametitle{The moments method: application}
+ 
+ \begin{block}{1D case ($\theta \in \mathbb{R}$)}
+  We take simply $a(X) = X$. Then $h(\theta_0) = \bar{X} = \mu$: it is the sample mean.
+ \end{block}
+ 
+ \begin{block}{ND case: $\vec{\theta} = (\theta_1,\dots,\theta_K)$}
+  We take $a_j(X) = X^j$. Then $h_j(\vec{\theta}) = \mu_j(\vec{\theta})$: $j$-ith moment of $f(X;\vec{\theta})$
+ \end{block}
+
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{The likelihood function}
+ 
+ \begin{block}{Likelihood function: definition}
+  Given $X$ a random variable of pdf $f(X;\theta)$, and $\{X_1,\dots,X_N\}$ $N$ independent trials, then we define
+  
+  $$\mathcal{L}\left(\vec{X};\theta\right) = \prod_{i=1}^N f(X_i,\theta)$$
+ \end{block}
+ 
+ NB:
+ 
+ \begin{itemize}
+  \item It is a function of the parameter, given the data: it is the ``likelihood'' of a given parameter value, given some observations in data. We sometimes write
+  $\mathcal{L}(\theta | X_i) = p(X_i | \theta)$.
+  \item It is tempting to consider the area under $\mathcal{L}$, but $\mathcal{L}(\theta)$ is not a probability distribution function in $\theta$: \alert{the area under $\mathcal{L}$ is meaningless}.
+  \item We will see that likelihood ratios are often used.
+ \end{itemize}
+
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{The maximum likelihood method (ML)}
+ 
+ In general the logarithm of $\mathcal{L}$ is used: $\ln \mathcal{L}\left(\vec{X};\theta\right) = \sum_{i=1}^N \ln f(X_i;\theta)$
+ 
+ \begin{block}{Maximum likelihood estimator}
+  $$\left. \frac{\partial (\ln \mathcal{L} \left(\vec{X};\theta\right)}{\partial \theta}\right|_{\hat{\theta}_\text{ML}} = \left.\frac{\partial}{\partial \theta} \left(  \sum_{i=1}^N \ln f(X_i;\theta) \right)\right|_{\hat{\theta}_\text{ML}} = 0$$
+  
+  $\hat{\theta}_\text{ML}$ is the maximum likelihood estimator of $\theta$.
+ \end{block}
+
+ Note: numerical methods are often designed to look for a minimum rather than a maximum. $-2 \ln \mathcal{L}$ is more commonly used.
+\end{frame}
+
+
+\end{document}
+
