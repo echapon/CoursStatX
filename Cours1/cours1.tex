@@ -723,7 +723,7 @@ simplistic for ``deciding'' in important situations.
  
  \begin{block}{Definition}
   \begin{eqnarray}
-   \Phi_X (t) & \equiv & E(e^{itx}) \qquad t \in \mathbb{R} \nonumber \\
+   \phi_X (t) & \equiv & E(e^{itx}) \qquad t \in \mathbb{R} \nonumber \\
    & = & \int_\Omega e^{itx} f(x) \dd x \qquad \text{(continuous)}\nonumber \\
    & = & \sum_k p_k e^{i t x_k}\qquad \text{(discrete)} \nonumber 
   \end{eqnarray}
@@ -731,11 +731,11 @@ simplistic for ``deciding'' in important situations.
  \end{block}
  
  If the pdf is continuous, then 
- $$f(x) = \frac{1}{2 \pi} \int_{-\infty}^{+\infty} \Phi_X(t) e^{-itx} \dd t$$
+ $$f(x) = \frac{1}{2 \pi} \int_{-\infty}^{+\infty} \phi_X(t) e^{-itx} \dd t$$
  
- Properties: $\Phi_X (0) = 0$, $|\Phi_X(t)| \leq 1 \quad \forall t$
+ Properties: $\phi_X (0) = 0$, $|\phi_X(t)| \leq 1 \quad \forall t$
  
- For $X,Y$ two independent variables: $\Phi_{X+Y}(t) = \Phi_X(t) \Phi_Y(t)$
+ For $X,Y$ two independent variables: $\phi_{X+Y}(t) = \phi_X(t) \phi_Y(t)$
 
 
 \end{frame}
@@ -744,7 +744,7 @@ simplistic for ``deciding'' in important situations.
  \frametitle{Taylor development of the characteristic function}
  
  \begin{block}{}
-  $$\Phi_X(t) = E(e^{itX}) = E \left( \sum_{n=0}^{+\infty} \frac{(itX)^p}{n!} \right) = \sum_{n=0}^{+\infty} \frac{(it)^n}{n!} E(X^n) $$
+  $$\phi_X(t) = E(e^{itX}) = E \left( \sum_{n=0}^{+\infty} \frac{(itX)^p}{n!} \right) = \sum_{n=0}^{+\infty} \frac{(it)^n}{n!} E(X^n) $$
   
   where $E(X^n)$ is the $n$\ith moment
  \end{block}
@@ -1162,6 +1162,18 @@ $$
 
     $$ \lim _{n\to \infty }P \left( |X_{n}-X|>\varepsilon \right)=0$$
  \end{block}
+ 
+ \begin{block}{Definition: convergence in probability}
+  A sequence $\{X_n\}$ of random variables converges in $r$-th mean towards the random variable $X$ if
+
+    $$ \lim _{n\to \infty } E(|X_n - X|^r)=0$$
+ \end{block}
+ 
+ \begin{block}{Definition: almost sure convergence}
+  A sequence $\{X_n\}$ of random variables converges in probability towards the random variable $X$ if
+
+    $$ P\left(\lim _{n\to \infty }  X_n = X \right)=1$$
+ \end{block}
 
 \end{frame}
 
@@ -1182,13 +1194,94 @@ $$
  \begin{block}{Strong law of large numbers}
   $$\text{If } \lim_{N \to \infty} \left( \frac{1}{N^2} \sum_{i=1}^N \sigma^2_i\right)\text{ stays finite, then } \bar{x} \xrightarrow[N \to \infty]{} \mu$$
   
-  where the convergence is ``almost certainly''
+  where the convergence is ``almost surely''
  \end{block}
  
  Both imply convergence in probability.
 
 \end{frame}
 
+\begin{frame}
+ \frametitle{Law of large numbers: example}
+ 
+ Let $g(x)$ be a function. One wants to compute the integral of $g$ using a Monte-Carlo method.
+ 
+ $$E[g] = \int_a^b g(u) f(u) \dd u$$
+ 
+ For instance, for a uniform pdf: 
+ 
+ $$f(u) = 
+ \begin{cases} 
+      \frac{1}{b-a} & \text{if } u \in [a,b] \\ 
+      0 & \text{otherwise}
+   \end{cases}
+$$
+
+Let's take a sequence $\{ u_1 \dots u_N\}$, giving ($g_i = g(u_i)$) $\{ g_1 \dots g_N\}$. Then:
+
+$$\structure{\frac{1}{N} \sum_{i=1}^N g_i \xrightarrow[N \to \infty]{}} E(g) = \int_a^b g(u) \frac{1}{b-a} \dd u = \structure{\frac{1}{b-a} \int_a^b g(u) \dd u}$$
+
+It is the integration of $g$ using the \textbf{Monte-Carlo method}. Compared to the method of rectangles, it converges faster, and works in $N$ dimensions.
+\end{frame}
+
+\begin{frame}
+ \frametitle{Central limit theorem: prelude}
+ 
+ Let $X$ be a random variable of pdf $f(x)$, with $E(X) = \bar{X}$, $V(x) = \sigma^2$. We get $N$ independent realisations $\{ x_1 \dots x_N \}$.
+ 
+ \begin{itemize}
+  \item $S_N = \sum_{i=1}^N x_i$ has mean $N \bar{X}$ and variance $N \sigma^2$.
+  \item $S_N = \frac{1}{N} \sum_{i=1}^N x_i$ has mean $\bar{X}$ and variance $\propto \frac{1}{N} \xrightarrow[N\to\infty]{}0$.
+ \end{itemize}
+
+ \begin{itemize}
+  \item The pdf of $s_2$ is $g_2(s) = \int f(s-x_1) f(x_1) \dd x_1 = f * f$
+  \item \dots
+  \item The pdf of $s_N$ is $g_N(s) = f^{*N}$
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Central limit theorem}
+ 
+ Let $\{ X_1 \dots X_N\}$ be a sequence of random variables, of pdf $f_i(X)i)$, with mean $\mu_i$ and variance $\sigma_i^2$. 
+ 
+ $S_N$, as defined previously, has mean $\sum_{i=1}^N \mu_i$ and variance $\sum_{i=1}^N \sigma_i^2$.
+ 
+ \begin{block}{Central limit theorem}
+  $$\text{pdf}\left(\frac{S_N - \sum_{i=1}^N \mu_i}{\sqrt{\sum_{i=1}^N \sigma_i^2}}\right) \xrightarrow[N\to\infty]{} G(S_N; 0,1)$$
+  
+  or, equivalently
+  
+  $$\text{pdf}(S_N) \xrightarrow[N\to\infty]{} G\left(S_N; \mu = \sum_{i=1}^N \mu_i,\sigma = \sqrt{\sum_{i=1}^N \sigma_i^2}\right)$$
+ \end{block}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Central limit theorem: proof}
+ 
+ We define $Y_N = \frac{\sum_{i=1}^N x_i}{N}$, $Z_N = \frac{Y_N - \mu}{\sigma \sqrt{N}}$, with $E(X_i) = \mu = 0$ and $V(X_i) = \sigma^2,\,\forall i$.
+ 
+ \begin{eqnarray}
+  \phi_{X_j}(t) & = & E(e^{itX_j}) = 1 + \frac{\sigma^2 (it)^2}{2} + o(t^2), \,\forall j \nonumber\\
+  \phi_{NY_N}(t) & = & \left( \phi_X (t)\right)^N \nonumber\\
+  \phi_{Z_N}(t) & = & \left( \phi_X \left( \frac{t}{\sigma/\sqrt{N}}\right) \right)^N \nonumber
+ \end{eqnarray}
+ 
+ For small $t$:
+ \begin{eqnarray}
+  \ln \phi_{Z_N}(t) & = & N \ln \left( \phi_X \left( \frac{t}{\sigma/\sqrt{N}} \right) \right)\nonumber\\
+  & = & N \ln \left(1 + \frac{\sigma^2 (it)^2}{2\sigma^2 N} + o\left( \frac{t^2}{N^{3/2}} \right) \right)\nonumber\\
+  & =_{N\to\infty} &  \frac{(it^2)^2}{2} + o\left( \frac{1}{\sqrt{N}}\right)
+ \end{eqnarray}
+
+ We get the characteristic function of a Gaussian:
+ 
+ $$\phi_{Z_N} (t) \xrightarrow[N\to\infty]{} e^{-\frac{1}{2} t^2}$$
+
+\end{frame}
 
 
 \end{document}
