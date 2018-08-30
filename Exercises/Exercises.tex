@@ -1,0 +1,61 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{ucs}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[pdftex]{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+
+\usepackage[pdftex]{hyperref}
+
+\title{Exercises}
+\author{}
+\date{}
+
+\begin{document}
+ \maketitle
+ 
+ \begin{enumerate}
+  \item A test to diagnose AIDS has a probability $\approx 1$ to give a positive result when the patient is infected and a probability of 0.2\% of giving a positive result when the patient
+  does not have HIV. On a given patient, the test has a positive result. What is the probability that he has AIDS, knowing that there are 100\,000 cases of the disease on a population
+  of 60M?
+  \item A particle detector has a muon identification efficiency of 95\% and a probability of identifying a pion as a muon of 2\%. If a particle is identified as a muon, a trigger is
+  fired. Knowing that the particle beam is a mixture of 90\% pions and 10\% muons, what is the probability that a trigger is really fired by a muon? What is the signal to noise ratio?
+  Draw conclusions on the request on the performance of the detector.
+  \item A random variable $X$ is uniformly distributed on the interval $[0,a]$. $N$ independent trials $\{x_i\}$ are drawn. We set $y = \max\{x_i\}$. What is the pdf for $y$?
+  \item Given two indpendent random variables $X$ and $Y$, with positive values and pdfs $e^{-x}$ and $e^{-y}$ respectively, determine the pdf of the sum $s = x+y$.
+  \item Generate an exponentially distributed variable using a uniform random number generator.
+  \item $X$ and $Y$ are two independent variables following a standardized normal distribution $G(0,1)$. Determine the pdf for the polar coordinates $r$ and $\theta$.\\
+  Corollary: generate two variables with a Gaussian distribution from two independent variables with a uniform distribution.
+  \item Let $X$ be a random variable with pdf $p(x)$. Given $N$ samples of $X$, make a histogram with bins of fixed width in $\log_{10}(x)$. What is the distribution of the number of
+  entries per bin? Consider the particular case $p(x) = \frac{1}{\tau}e^{-x/\tau}\,(\tau>0)$.
+  \item Consider two independent random variables $X$ and $Y$, with Gaussian distributions $G(0,1)$ and $G(1,2)$ respectively. Consider the change of variables $u=x+y$; $v=x-y$.
+  Determine the standard deviation of $u$ and $v$ and their covariance. Find the expression of their joint pdf.
+  \item Generate a random variable with (asymptotically) gaussian distribution using a generator of uniformly distributed random numbers, using a different method from that of ex.~6.
+  \item Determine the forward/backward asymmetry from a sample of data where $F$ events were measured in the forward hemisphere and $B$ in the backward one, in the two cases:
+  \begin{enumerate}
+   \item when the total number of events $N=F+B$ is fixed;
+   \item when the total number of events is not fixed.
+  \end{enumerate}
+  \item Determine the distribution of the number of electrons at each dynode of a photomultiplier.
+  \item Consider a random variable $X$ distributed according to an exponential law: $f(x) = \frac{1}{\tau} e^{-x/\tau}\,(x>0)$. Use $N$ independent trials $\{x_i\}$ to estimate the 
+  parameter $\tau$ with the method of moments and with the maximum likelihood method.
+  \item Let $X$ be a random variable with pdf 
+  $$f(x) = \begin{cases} 
+      \frac{1}{2\theta\sqrt{x}}\exp\left(-\frac{\sqrt{x}}{\theta}\right) & \text{for } x>0 \\ 
+      0 & \text{for } x \leq 0
+   \end{cases}$$
+   where $\theta$ is a positive parameter. Use a sample of independent trials $\{x_1, \dots, x_N\}$ to estimate $\theta$. Construct the maximum likelihood estimator and study its properties.
+   \item A random variable $X$ is uniformly distributed on the interval $[0,a]$. $n$ indpendent trials $\{x_i\}$ are drawn. Use them to estimate $a$.
+   \item Draw a sample $\{x_1, \dots, x_N\}$ of $N$ independent measurements from a variable $X$ following a normal distribution with unknowm mean $m$ and known standard deviation $\sigma=1$. Use this sample to choose between the two hypotheses $H_0:\,m=1$ and $H_1:\,m=1.5$. Determine the critical region of the Neyman-Pearson test and compute its power when
+   $N=25$ and $\alpha=0.05$. What is the minimum required samples size to have a contamination smaller than 0.1?
+   \item Two forms of silicon dioxide (Barlow s.8.1.5). The density of opal is 2.2\,g/cm$^3$, that of quartz is 2.6\,g/cm$^3$. Various sites produce small quantities of crystals which 
+   could be either: their density is measurable with a resolution of 0.2\,g/cm$^3$. Which sites are worth the trouble and expenses of further excavation?
+ \end{enumerate}
+
+\end{document}
+ 
