@@ -28,6 +28,8 @@
   Draw conclusions on the request on the performance of the detector.
   \item A random variable $X$ is uniformly distributed on the interval $[0,a]$. $N$ independent trials $\{x_i\}$ are drawn. We set $y = \max\{x_i\}$. What is the pdf for $y$?
   \item Given two indpendent random variables $X$ and $Y$, with positive values and pdfs $e^{-x}$ and $e^{-y}$ respectively, determine the pdf of the sum $s = x+y$.
+  \item Ratio of random variables. Consider two independent random variables $X$ and $Y$, with Gaussian distributions $G(\mu_X,\sigma_X)$ and $G(\mu_Y,\sigma_Y)$ respectively. Determine
+  the pdf of $Z = X/Y$. What are its mean and variance? Repeat the exercice assuming Poisson pdfs: $X$ with mean $\mu_X$, $Y$ with mean $\mu_Y$.
   \item Generate an exponentially distributed variable using a uniform random number generator.
   \item $X$ and $Y$ are two independent variables following a standardized normal distribution $G(0,1)$. Determine the pdf for the polar coordinates $r$ and $\theta$.\\
   Corollary: generate two variables with a Gaussian distribution from two independent variables with a uniform distribution.
@@ -35,10 +37,10 @@
   entries per bin? Consider the particular case $p(x) = \frac{1}{\tau}e^{-x/\tau}\,(\tau>0)$.
   \item Consider two independent random variables $X$ and $Y$, with Gaussian distributions $G(0,1)$ and $G(1,2)$ respectively. Consider the change of variables $u=x+y$; $v=x-y$.
   Determine the standard deviation of $u$ and $v$ and their covariance. Find the expression of their joint pdf.
-  \item Generate a random variable with (asymptotically) gaussian distribution using a generator of uniformly distributed random numbers, using a different method from that of ex.~6.
+  \item Generate a random variable with (asymptotically) gaussian distribution using a generator of uniformly distributed random numbers, using a different method from that of ex.~7.
   \item Determine the forward/backward asymmetry from a sample of data where $F$ events were measured in the forward hemisphere and $B$ in the backward one, in the two cases:
   \begin{enumerate}
-   \item when the total number of events $N=F+B$ is fixed;
+   \item when the total number of events $N=F+B$ is fixed (note that this also corresponds to the case of an efficiency, $\epsilon = \frac{N_\text{pass}}{N_\text{total}}$, with $N_\text{total}$ fixed);
    \item when the total number of events is not fixed.
   \end{enumerate}
   \item Determine the distribution of the number of electrons at each dynode of a photomultiplier.

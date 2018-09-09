@@ -35,7 +35,7 @@
 
 \date[Stat2]{Sept. 27, 2018}
 \title{Methods of statistical analysis and simulation}
-\subtitle{Cours 1}
+\subtitle{Cours 2}
 \author[E. Chapon]{Émilien Chapon}
 % \institute[(CERN)]{CERN}
 % \logo{\includegraphics[height=0.6cm]{../../CMS-Color-Label.pdf}\hspace{1.05\textwidth}\includegraphics[height=0.6cm]
@@ -56,24 +56,138 @@
 \end{frame}
 }
 
+
+% CONTENU
+% point estimation... cf cours ED, compléter avec le F. James
+
 \begin{frame}
  \frametitle{Outline}
  
  \tableofcontents
 \end{frame}
 
+\section{Information}
+
+\begin{frame}
+ \frametitle{The likelihood function}
+ 
+ We discuss a random variable $X$, with pdf $f(X|\theta)$, where $\theta$ is a real parameter (or a set of $k$ real parameters).
+ The set of allowed values of $X$ is denoted $\Omega_\theta$.
+ 
+ We consider $N$ independent observations of $X$: $X_1,\dots,X_N$. The joint pdf is, by independence,
+ 
+ $$P(\vec{X}|\theta) = P(X1,\dots,X_N)|\theta) = \prod_{i=1}^N f(X_i|\theta)$$
+ 
+ \begin{block}{Likelihood function}
+  The likelihood function is a function of $\theta$, given the observed data $X^0$:
+  
+  $$\mathcal{L}(\theta) = P(X^0|\theta)$$
+ \end{block}
+
+  
+\end{frame}
+
+\begin{frame}
+ \frametitle{Notes on the likelihood function}
+ 
+ \begin{itemize}
+  \item It is tempting to consider the area under $\mathcal{L}$, but $\mathcal{L}(\theta)$ is not a probability distribution function in $\theta$: \alert{the area under $\mathcal{L}$ is meaningless}.
+  \item We will see that likelihood ratios are often used.
+ \end{itemize}
+
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Likelihood function: example}
+ 
+ \begin{itemize}
+  \item Poisson probability $P(n|\mu) = \mu^n \frac{e^{-\mu}}{n!}$
+  \item Suppose $n=3$ is observed. We get the likelihood function:
+  $$\mathcal{L}(\mu) = \mu^3 \frac{e^{-\mu}}{3!}$$
+ \end{itemize}
+ 
+ \begin{center}
+  \includegraphics[width=0.6\textwidth]{likelihood_Poisson.png}
+ \end{center}
+
+
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{Statistic}
+ 
+ \begin{block}{Definition}
+  Suppose a new random variable: $T = T(X_1,\dots,X_N)$. Any such function $T$ is called a \textbf{statistic}.
+ \end{block}
+ 
+ Example: sample mean $\bar{X}$.
+ 
+ \vspace{10pt}
+ 
+ NB: careful not to confuse this \textbf{statistic} with \textbf{statistics} (the field of mathematics we are discussing) or \textbf{statistics} (physicist's jargon as a substitute for
+ ``data'' or ``amount of data''. Better avoid the latter usage when writing papers!
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Sufficient statistics}
+ 
+ \begin{block}{Definition}
+  A statistic is said to be \textbf{sufficient} if $f(\vec{X}|T)$ is independent of $\theta$.
+ \end{block}
+ 
+ Properties:
+ 
+ \begin{itemize}
+  \item If $T$ is a sufficient statistic for $\theta$, then any strictly monotonic function of $T$ is also a sufficient statistic for $\theta$.
+  \item $T(\vec{X})$ is a sufficient statistic for $\theta$ iff the likelihood factorises as
+  $$\mathcal{L}(\vec{X}|\theta) = g(T,\theta) h(\vec{X}),$$
+  where:
+  \begin{enumerate}
+   \item $h(\vec{X})$ does not depend on $\theta$
+   \item $g(T,\theta) \propto A(T|\theta)$, the conditional pdf for $T$ given $\theta$.
+  \end{enumerate}
+ \end{itemize}
+
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Darmois theorem}
+ 
+ This theorem proves that only a very restricted class of probability density functions admits a number of sufficient statistics independent of the number of observations.
+ 
+ \begin{itemize}
+  \item Whatever $\Omega_\theta$, if there exists a number $N>1$ such that the set $X1,\dots,X_N$ admits a sufficient statistic for $\theta$, then the pdf is of the ``exponential form''
+  $$f(X|\theta) = \exp [ \alpha(X)a(\theta) + \beta(X) + c(\theta)]$$
+  \item Inversely, $(X1,\dots,X_N)$ admits a sufficient statistic for all $N>1$ (but only if $\Omega_\theta$ does not depend on $\theta$), if $f(X|\theta)$ has the exponential form,
+  and if the mapping $(X_1,\dots,X_N) \Rightarrow (R,X_2,\dots,X_N)$, with
+  $$R = \sum_{i=1}^N \alpha(X_i),$$
+  is one-to-one and continuously differentiable for all $X$. $R$ is sufficient for $\theta$, as well as any monotonic function of $R$.
+ \end{itemize}
+
+\end{frame}
+
+
+
 \section{Point estimation}
+
+\begin{frame}
+ \frametitle{Outline}
+ 
+ \tableofcontents[current]
+\end{frame}
+
 
 \begin{frame}
  \frametitle{Parameter estimation}
  
  Let $X$ be a random variable of pdf $f(x;\theta_0)$, with $\theta_0$ unknown. We draw $N$ independent trials of $X$, $\{x_1,\dots,x_N\}$.
  
- \begin{block}{Definition: statistic}
-  Any random variable $T$ that is a function of the data, $T = T(X1,\dots,X_N)$, is called a \textbf{statistic}.
- \end{block}
  
- An \textbf{estimator} is a statistic that can be used to estimate $\theta_0$. It can have the following properties:
+ An \textbf{estimator} is a statistic $t_N(x_1,\dots,x_N)$ that can be used to estimate $\theta_0$. It can have the following properties:
  
  \begin{description}
   \item[unbiased]: if $\langle t_N \rangle = \theta_0$ (otherwise the bias is $\langle t_N \rangle - \theta_0 = b_N$)
@@ -87,6 +201,15 @@
  \end{description}
 
 \end{frame}
+
+\begin{frame}
+ \frametitle{Illustration}
+ 
+ pdfs for $t_N$ in different cases
+ 
+ \includegraphics[width=\textwidth]{estimators.jpg}
+\end{frame}
+
 
 \begin{frame}
  \frametitle{Usual methods of constructing consistent estimators}
@@ -135,27 +258,6 @@
 \end{frame}
 
 \begin{frame}
- \frametitle{The likelihood function}
- 
- \begin{block}{Likelihood function: definition}
-  Given $X$ a random variable of pdf $f(X;\theta)$, and $\{X_1,\dots,X_N\}$ $N$ independent trials, then we define
-  
-  $$\mathcal{L}\left(\vec{X};\theta\right) = \prod_{i=1}^N f(X_i,\theta)$$
- \end{block}
- 
- NB:
- 
- \begin{itemize}
-  \item It is a function of the parameter, given the data: it is the ``likelihood'' of a given parameter value, given some observations in data. We sometimes write
-  $\mathcal{L}(\theta | X_i) = p(X_i | \theta)$.
-  \item It is tempting to consider the area under $\mathcal{L}$, but $\mathcal{L}(\theta)$ is not a probability distribution function in $\theta$: \alert{the area under $\mathcal{L}$ is meaningless}.
-  \item We will see that likelihood ratios are often used.
- \end{itemize}
-
-
-\end{frame}
-
-\begin{frame}
  \frametitle{The maximum likelihood method (ML)}
  
  In general the logarithm of $\mathcal{L}$ is used: $\ln \mathcal{L}\left(\vec{X};\theta\right) = \sum_{i=1}^N \ln f(X_i;\theta)$
@@ -167,6 +269,286 @@
  \end{block}
 
  Note: numerical methods are often designed to look for a minimum rather than a maximum. $-2 \ln \mathcal{L}$ is more commonly used.
+\end{frame}
+
+\begin{frame}
+ \frametitle{The maximum likelihood estimator (MLE)}
+ 
+ This estimator is 
+ \begin{itemize}
+  \item asymptotically efficient
+  \item biased
+  \item non optimal (except when the likelihood is of the exponential form)
+  \item convergent
+  \item invariant: the ML estimate $\hat{\tau}$ of a function $\tau(\theta)$ is $\hat{\tau} = \tau(\hat{\theta})$
+  \begin{itemize}
+   \item However other properties of the MLE (e.g. the bias) are not invariant under change of parameter.
+  \end{itemize}
+
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Variance of the MLE}
+ 
+ $$V(\hat{\theta}_{ML}) \xrightarrow[N\to\infty]{} \frac{1}{N} \left[ \left.-E\left(\frac{\partial^2\ln f(x;\theta)}{\partial \theta^2}\right)\right|_{\theta=\theta_0} \right]^{-1} \approx \frac{1}{D_2(\theta=\hat{\theta}_{ML})}$$
+ 
+\end{frame}
+
+\begin{frame}
+ \frametitle{(Academic) example of a poor MLE}
+ 
+ One observed $N$ events $X_i$ from a uniform distribution in $[0,\theta]$, where $\theta$ is \textbf{unknown}. 
+ 
+ \begin{itemize}
+  \item The likelihood function is $\mathcal{L} = \prod_{i=1}^N \theta^{-1} = \theta^{-N}$ and the MLE is $\hat{\theta} = \max\{X_i\}$.
+  \item The MLE is biased (always to small by definition)... intuitively $\hat{\theta}_{CS} = \max\{X_i\} + \max\{X_i\}/N$ is a better estimate.
+ \end{itemize}
+\end{frame}
+
+\begin{frame}
+ \frametitle{(Academic) example of a poor MLE}
+ 
+ \begin{center}
+  \includegraphics[width=0.7\textwidth]{academic_MLE.jpg}
+ \end{center}
+
+\end{frame}
+
+
+
+\section{Least squares method}
+
+\begin{frame}
+ \frametitle{Outline}
+ 
+ \tableofcontents[current]
+\end{frame}
+
+\begin{frame}
+ \frametitle{Least squares method (aka $\chi^2$ estimator)}
+ 
+ We consider $N$ observations $\vec{x}$
+ 
+ $E(x_i;\vec{\theta})$ and $V_{ij}(\vec{\theta})$ ($i,j = 1\dots N$) are \textbf{known functions} of $\vec{\theta}$
+ 
+ \begin{block}{Least squares estimator}
+ The estimator is the value $\vec{\theta}$ such that $Q$ is minimum:
+ 
+  $$Q = \left[ \vec{X} - E(\vec{X};\vec{\theta}\right]^\intercal V^{-1} (\vec{\theta}) \left[ \vec{X} - E(\vec{X};\vec{\theta}) \right]$$
+  
+  $$Q = \sum_{i=1}^N \sum_{j=1}^N \left[ X_i - E(X_i;\vec{\theta})\right] V^{-1}_{ij} \left[ X_j - E(X_j;\vec{\theta})\right]$$
+ \end{block}
+ 
+ This estimator is:
+ 
+ \begin{itemize}
+  \item consistent
+  \item (generally) biased
+  \item non-optimal
+ \end{itemize}
+
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Gaussian case}
+ 
+ In the Gaussian case, the least squares and maximum likelihood methods coincide. Assuming $N$ independent measurements $y_i$ at known points $x_i$, Gaussian distributed with mean
+ $\mu(x_i;\theta)$ and known variance $\sigma_i^2$:
+ 
+ $$\chi^2(\theta) = -2\ln\mathcal{L}(\theta) + \text{constant} = \sum_{i=1}^N \frac{\left(X_i - \mu(\theta)\right)^2}{\sigma_i^2}$$
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{$\chi^2$ estimator: uncorrelated case}
+ 
+ Uncorrelated case: $V_{ij} = 0 $ for $i \neq j$
+ 
+ $$Q = \sum_{i=1}^N \frac{\left(x_i - E(x_i; \vec{\theta})\right)^2}{\sigma_i^2(\vec{\theta})}$$
+\end{frame}
+
+\begin{frame}
+ \frametitle{Variance of the $\chi^2$ estimator}
+ 
+ If $\theta \in \mathbb{R}$:
+ 
+ $$V(\hat{\theta}_{LS}) \xrightarrow[N\to\infty]{} 2\left(\left.\frac{\partial^2 Q}{\partial\theta^2}\right|_{\theta=\theta_0}\right)^{-1} \approx \frac{2}{D_2(\theta=\hat{\theta}_{LS})}$$
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{Specific cases of the $\chi^2$ estimator}
+ 
+ \begin{block}{Linear case}
+  If $\sigma_i$ are independent of $\theta$, and $E(x_k;\theta)$ linear function of $\theta$: $Q$ is optimal and convergent
+ \end{block}
+ 
+ \begin{block}{Gaussian case}
+  If the $x_i$ follow a normal law $G(X_i;\mu_i,\sigma_i)$: $Q$ follows a $\chi^2$ law, $\chi^2(Q;N)$:
+  
+  $$\chi^2(\vec{\theta}) = \sum_{i=1}^N \frac{\left( X_i - \mu_i (\vec{\theta})\right)^2}{\sigma_i^2 (\vec{\theta})}$$
+  
+  If in addition the model is linear ($\sigma_i$ independent of $\theta$): $\chi^2_\text{min} = \chi^2 (\chi^2_\text{min};N-r)$ (with $r$ the dimension of $\vec{\theta}$), and $\vec{\theta}_{LS}$ follows a normal law of dimesion $r$ with $\langle \hat{\theta}_{LS}\rangle = \vec{\theta}_0$, $V = 2 D_2^{-1}$
+  
+ \end{block}
+
+
+\end{frame}
+
+\section{Parameter estimation with histograms}
+
+\begin{frame}
+ \frametitle{Outline}
+ 
+ \tableofcontents[current]
+\end{frame}
+
+\begin{frame}
+ \frametitle{}
+ 
+ Let's assume an histogram with $N$ uncorrelated bins (the total number of events is not fixed): $d_i$ events in bin $i$, with $i = 1 \dots N$. The $d_i$ follow Poisson laws: $E(d_i;\theta) = f_i(\theta)$,
+ $\sigma^2(d_i;\theta) = f_i(\theta)$.
+ 
+ \begin{block}{Minimum $\chi^2$ method}
+ Expected uncertainties: 
+ 
+  $$Q_P = \sum_{i=1}^N = \frac{\left(d_i - f_i\right)^2}{f_i^2}$$
+ \end{block}
+ 
+ \begin{block}{Modified minimum $\chi^2$ method}
+ Observed uncertainties:
+ 
+  $$Q_N = \sum_{i=1}^N = \frac{\left(d_i - f_i\right)^2}{d_i^2}$$
+ \end{block}
+ 
+ \begin{block}{Binned likelihood}
+  $$\ln \lambda = \sum_{i=1}^N d_i \ln f_i$$
+ \end{block}
+
+
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{}
+ 
+ The three methods are asymptotically equivalent. The binned likelihood method converges faster (and the modified $\chi^2$ is the slowest), and is less sensitive to empty bins. 
+\end{frame}
+
+\section{Some basic estimators}
+
+
+\begin{frame}
+ \frametitle{Outline}
+ 
+ \tableofcontents[current]
+\end{frame}
+
+\begin{frame}
+ \frametitle{Sample mean}
+ 
+ $$\bar{X} = \sum_{i=1}^N \frac{x_i}{N} = \bar{mu}$$
+ 
+ This estimator is unbiased, thanks to the central limit theorem.
+ 
+ Its variance is:
+ 
+ $$V(\hat{\mu}) = \frac{\sigma^2}{N},\qquad\text{i.e.}\quad \sigma(\hat{\mu}) = \frac{\mu}{\sqrt{N}}$$
+ 
+ The sample mean is an efficient estimator of the mean of a Gaussian, but not in the general case.
+\end{frame}
+
+\begin{frame}
+ \frametitle{Variance estimator: known mean}
+ 
+ $$\hat{V}_\mu = \frac{1}{N} \sum_{i=1}^N (x_i-\mu)^2$$
+ 
+ This estimator is consistent and unbiased: $\langle \hat{V}_\mu \rangle = \frac{N\langle (x-\mu)^2 \rangle}{N} = V$
+\end{frame}
+
+\begin{frame}
+ \frametitle{Variance estimator: unknown mean}
+ 
+ Using $\hat{\mu} = \bar{X}$
+ 
+ $$\hat{V}_b = \frac{1}{N} \sum_{i=1}^N (x_i-\bar{X})^2 = \frac{1}{N} \sum_{i=1}^N (x_i^2 - \bar{X}^2)$$
+ 
+ \begin{eqnarray}
+  \langle \hat{V}_b \rangle & = & \frac{N \langle X^2 - \bar{X}^2 \rangle}{N} = \langle X^2 \rangle - \langle \bar{X} \rangle^2 \nonumber \\
+  & = & \langle X^2 \rangle - \langle X \rangle^2 - \left( \langle \bar{X}^2 \rangle - \langle \bar{X} \rangle ^2 \right) \nonumber \\
+  & = & V(X) - V(\bar{X}) \nonumber \\
+  & = & V(X) - \frac{V(X)}{N} \nonumber \\
+  & = & \left( 1 - \frac{1}{N} \right) V(X)\quad \neq V(X) \nonumber
+ \end{eqnarray}
+ 
+ This estimator is biased! $\rightarrow$ Bessel correction
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Variance estimator: unknown mean}
+
+ \begin{block}{}
+  $$\hat{V} = \frac{1}{N-1} \sum_{i=1}^N (x_i - \bar{X})^2$$
+ \end{block}
+ 
+ $$V(\hat{V}) = \frac{2V}{N}$$
+
+\end{frame}
+
+\section{Point estimation in practice}
+
+\begin{frame}
+ \frametitle{Outline}
+ 
+ \tableofcontents[current]
+\end{frame}
+
+\begin{frame}
+ \frametitle{Choice of estimator}
+ How to choose an estimator? It should have the following properties:
+ 
+ \begin{itemize}
+  \item Consistency and unbiasedness
+  \item Minimum loss of information
+  \item Minimum variance (efficient estimator)
+  \item Robustness
+  \item Simplicity (e.g. if possible normally distributed, etc.)
+  \item Minimum computer time
+  \item Minimum loss of physicist's time
+ \end{itemize}
+
+\end{frame}
+
+\subsection{More realistic cases}
+
+% cf Fred James + PDG stat review
+
+\begin{frame}
+ \frametitle{Extended likelihood}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Nuisance parameters}
+\end{frame}
+
+
+\section{Data combination}
+
+\begin{frame}
+ \frametitle{Outline}
+ 
+ \tableofcontents[current]
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{Combination of data}
+ 
+ BLUE, etc
 \end{frame}
 
 

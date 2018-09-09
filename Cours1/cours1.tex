@@ -844,7 +844,7 @@ $$
 \end{frame}
 
 \begin{frame}
- \frametitle{Covariance matrix: change of variables}
+ \frametitle{Covariance matrix: linear change of variables}
  
  \begin{block}{Linear change of variables $\vec{Z} = A \vec{X} + B$}
   $$V_{\vec{Z}} = A\, V_{\vec{X}}\, ^t A$$
@@ -854,6 +854,34 @@ $$
   $$E \left( \sum_{i=1}^{N} a_i X_i \right) = \sum_{i=1}^{N} a_i E(X_i)$$
   $$V \left( \sum_{i=1}^{N} a_i X_i \right) = \sum_{i=1}^{N} a_i V(X_i) + 2 \sum_{i=1}^{N-1} \sum_{j=i+1}^{N} a_i a_j C(X_i,X_j)$$
  \end{block}
+ 
+ \end{frame}
+ 
+\begin{frame}
+  \frametitle{Error propagation}
+  
+  \begin{alertblock}{}
+   Error propagation: this is why ``errors add in quadrature''! (\textbf{in the uncorrelated case})
+  \end{alertblock}
+  
+  \begin{block}{Uncorrelated case: $Z = A+B$, $\rho_{AB} = 0$}
+   $E(A+B) = E(A) + E(B)$
+   
+   $\Rightarrow \sigma(A+B) = \sqrt{\sigma(A)^2 + \sigma(B)^2}$
+  \end{block}
+
+  \begin{block}{Fully correlated case: $Z = A+B$, $\rho_{AB} = 1$}
+   $E(A+B) = E(A) + E(B) + 2 \times E(A) E(B)$
+   
+   $\Rightarrow \sigma(A+B) = |\sigma(A) + \sigma(B)|$
+  \end{block}
+
+
+\end{frame}
+
+ 
+ \begin{frame}
+\frametitle{Covariance matrix: nonlinear change of variables}
 
  \begin{block}{Nonlinear change of variables $\vec{Y} = \vec{H} (\vec{X})$}
   There is no exact formula for $V_{\vec{Y}}$. However,
@@ -865,6 +893,13 @@ $$
 
 
 \end{frame}
+
+\begin{frame}
+ \frametitle{Error propagation: a summary of common cases}
+ 
+ \includegraphics[width=1.1\textwidth]{propagation_errors_table.png}
+\end{frame}
+
 
 \begin{frame}
  \frametitle{Application: sample mean}
