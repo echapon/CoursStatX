@@ -349,6 +349,12 @@
  
  $$V(\hat{\theta}_{ML}) \xrightarrow[N\to\infty]{} \frac{1}{N} \left[ \left.-E\left(\frac{\partial^2\ln f(x;\theta)}{\partial \theta^2}\right)\right|_{\theta=\theta_0} \right]^{-1} \approx \frac{1}{D_2(\theta=\hat{\theta}_{ML})}$$
  
+ \vspace{20pt}
+ 
+ For finite samples, this can result in a misestimation of the variances. In the large sample limit (or in a linear model with Gaussian data), $\mathcal{L}$ is Gaussian and $\ln\mathcal{L}$ is (hyper)parabolic. Then contours with $s$ times the standarad deviations $\sigma_i$ can be found from the (hyper)surface defined by $\theta$ such that:
+ 
+ $$\ln\mathcal{L}(\theta) = \ln\mathcal{L}(\hat{\theta}_\text{ML}) - s^2/2$$
+ 
 \end{frame}
 
 \begin{frame}
@@ -386,7 +392,7 @@
  
  We consider $N$ observations $\vec{x}$
  
- $E(x_i;\vec{\theta})$ and $V_{ij}(\vec{\theta})$ ($i,j = 1\dots N$) are \textbf{known functions} of $\vec{\theta}$
+ $E(x_i;\vec{\theta})$ is a  and $V_{ij}$ ($i,j = 1\dots N$) are \textbf{known functions} of $\vec{\theta}$
  
  \begin{block}{Least squares estimator}
  The estimator is the value $\vec{\theta}$ such that $Q$ is minimum:
@@ -467,23 +473,29 @@
  Let's assume an histogram with $N$ uncorrelated bins (the total number of events is not fixed): $d_i$ events in bin $i$, with $i = 1 \dots N$. The $d_i$ follow Poisson laws: $E(d_i;\theta) = f_i(\theta)$,
  $\sigma^2(d_i;\theta) = f_i(\theta)$.
  
- \begin{block}{Minimum $\chi^2$ method}
- Expected uncertainties: 
- 
+ \begin{block}{Minimum $\chi^2$ method (expected uncertainties)} 
+ \vspace{-7pt}
   $$Q_P = \sum_{i=1}^N = \frac{\left(d_i - f_i\right)^2}{f_i^2}$$
+  \vspace{-7pt}
  \end{block}
  
- \begin{block}{Modified minimum $\chi^2$ method}
- Observed uncertainties:
- 
+ \begin{block}{Modified minimum $\chi^2$ method (observed uncertainties)} 
+ \vspace{-7pt}
   $$Q_N = \sum_{i=1}^N = \frac{\left(d_i - f_i\right)^2}{d_i^2}$$
+  \vspace{-7pt}
  \end{block}
  
- \begin{block}{Binned likelihood}
-  $$\ln \lambda = \sum_{i=1}^N d_i \ln f_i$$
+ \begin{block}{Binned likelihood (multinomial data)}
+ \vspace{-7pt}
+  $$\ln \lambda = - \sum_{i=1}^N d_i \ln (d_i/f_i)$$
+  \vspace{-7pt}
  \end{block}
 
-
+\begin{block}{Binned likelihood (Poisson data)}
+\vspace{-7pt}
+  $$\ln \lambda = - \sum_{i=1}^N f_i - d_i + d_i \ln (d_i/f_i)$$
+  \vspace{-7pt}
+ \end{block}
 
 \end{frame}
 
@@ -584,11 +596,74 @@
 
 \begin{frame}
  \frametitle{Extended likelihood}
+ 
+ In many cases the number of events $n$ is not fixed: this dependence should be included in the likelihood: this is called the extended likelihood.
+ 
+ $$\mathcal{L}(\vec{\theta}) = \frac{\mu^n}{n!}e^{-\mu} \prod_{i=1}^{n} f(x_i | \vec{\theta})$$
+ 
+ $\mu$ sometimes depends on $\vec{\theta}$ itself, providing additional information.
 \end{frame}
 
 \begin{frame}
  \frametitle{Nuisance parameters}
+ 
+ The parameters of the likelihood are usually split in two categories:
+ 
+ \begin{itemize}
+  \item \textbf{parameters of interest} $\vec{\theta}$: the parameters we are interested in measuring;
+  \item \textbf{nuisance parameters} $\vec{\nu}$: other parameters.
+ \end{itemize}
+ 
+ Example: the likelihood could depend on $\sigma_S$, the signal cross section (a parameter of interest), and $\mu_B$, a background cross section (a nuisance parameter).
+
 \end{frame}
+
+\begin{frame}
+ \frametitle{Nuisance parameters in practice}
+ 
+ It is often useful to ``constrain'' the nuisance parameters if possible:
+ 
+ 
+ \begin{block}{Using prior knowledge}
+  Assume that we know the pdf for $\vec{\nu}$: $P_{\vec{\nu}}$. Then the likelihood becomes:
+  
+ $$\mathcal{L}(\vec{\theta},\vec{\nu}) = P_x(\vec{x}|\vec{\theta},\vec{\nu}) P_y(\vec{y}|\vec{\nu})$$ 
+ \end{block}
+ 
+ \begin{block}{Using auxiliary data}
+ Assume that we have $\vec{y}$ measurements, statistically independent from $\vec{x}$, and described by a model $P_y(\vec{y}|\vec{\nu})$. Then:
+ 
+  $$\mathcal{L}(\vec{\theta},\vec{\nu}) = P_x(\vec{x}|\vec{\theta},\vec{\nu}) P_y(\vec{y}|\vec{\nu})$$
+ \end{block}
+
+ Technical note: if one wants to simulate the experiment with Monte Carlo, $\vec{x}$ and $\vec{y}$ must be generated under assumption of \textbf{fixed} values for $\vec{\theta}$ and $\vec{\nu}$.
+\end{frame}
+
+\begin{frame}
+ \frametitle{Frequentist treatment of nuisance parameters: profile likelihood}
+ 
+ It is useful to remove the dependence of the likelihood $\mathcal{L}(\vec{\theta},\vec{\nu})$ on the nuisance parameters $\vec{\nu}$, by defining the profile likelihood:
+ 
+ $$\mathcal{L}_\text{p}(\vec{\theta}) = \mathcal{L}(\vec{\theta},\hat{\hat{\vec{\nu}}}(\vec{\theta})),$$
+ 
+ where $\hat{\hat{\vec{\nu}}}(\vec{\theta})$ is the value of $\vec{\nu}$
+ the maximises the likelihood for a given value of $\vec{\theta}$. We'll come back to profile likelihood later.
+\end{frame}
+
+\section{Bayesian inference}
+
+\begin{frame}
+ \frametitle{Outline}
+ 
+ \tableofcontents[current]
+\end{frame}
+
+\begin{frame}
+ \frametitle{Bayesian inference}
+ 
+ cf Fred James. also mention marginalisation... to be further discussed later.
+\end{frame}
+
 
 
 \section{Data combination}
