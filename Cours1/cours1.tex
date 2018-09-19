@@ -1,4 +1,5 @@
 \documentclass[9pt]{beamer}
+% \documentclass[9pt,handout]{beamer}
 
 \usepackage{ucs}
 \usepackage[utf8x]{inputenc}
@@ -29,9 +30,21 @@
 
 \setbeamertemplate{navigation symbols}{}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \setbeameroption{show notes} % un-comment to see the notes
+% \setbeamertemplate{note page}[plain]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newif\ifmynote
+% \mynotetrue
+\mynotefalse
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
  \newcolumntype{x}[1]{%
 >{\centering\hspace{0pt}}p{#1}}%
 \newcommand{\tn}{\tabularnewline}
+\newcommand\mynote[1]{%
+\ifmynote \textbf{#1} \else \fi
+}
 
 \date[Stat1]{Sept. 20, 2018}
 \title{Methods of statistical analysis and simulation}
@@ -59,7 +72,10 @@
 \begin{frame}
  \frametitle{Organisation of the class}
  
- \begin{block}{Organisation of the class}
+ \mynote{(Tableau d'abord)}
+ 
+ \begin{block}{Organisation of the class }
+ 
   Two modules:
   
   \begin{itemize}
@@ -88,7 +104,7 @@
   \item Particle physicist at CERN
   \item CMS (general-purpose experiment at the CERN LHC)
   \item Studying heavy-ion collisions
-  \item Graduated on the search for H$\to$WW at the Tevatron (D0)
+  \item Worked on H$\to$WW at the Tevatron (D0) in the past
  \end{itemize}
 
 \end{frame}
@@ -99,10 +115,23 @@
  \begin{itemize}
   \item Probability and random variables
   \item Parameter estimation
+  \item Interval estimation
   \item Hypothesis testing
+  \item Systematic uncertainties
+  \item Unfolding
+  \item Introduction to MVA
+  \item \dots
  \end{itemize}
 
 \end{frame}
+
+% \begin{frame}
+%  \frametitle{First course: outline}
+%  
+%  \tableofcontents
+% \end{frame}
+
+\section{Introduction}
 
 \begin{frame}
  \frametitle{Introduction}
@@ -132,6 +161,8 @@ $\to$ confusion on the ``usual'' and ``statistician'' meanings of the word confi
 
 \begin{frame}
  \frametitle{Language}
+ 
+ \mynote{Tableau d'abord}
  
  \begin{center}
  \begin{tabular}{ll}
@@ -198,19 +229,23 @@ inference and to inform informal application.
 \begin{frame}
  \frametitle{Two philosophies}
  
+ \mynote{Écrire au tableau: Bayesian et Frequentist, et expliquer à l'oral}
+ 
  Unfortunately, statisticians do not agree on basic principles. They can crudely be divided into two schools: Bayesian and frequentist (or classical). The name Bayesian
  derives from the extended use of Bayes theorem in the former group.
  
+ \uncover<2->{
  \begin{block}{Bayesian}
   Closer to everyday reasoning, where probability is interpreted as a \emph{degree of belief} that something will happen, or that a parameter will have a given value. 
- \end{block}
+ \end{block}}
  
+ \uncover<3->{
  \begin{block}{Frequentist}
   Closer to scientific reasoning, where probability means the relative frenquency of something happening. This makes it more objective, since it can be determined independently of the 
   observer, but restricts its application to repeatable phenomena.
   
   In particular: one can define the frequentist probability for observing data (which are random), but not for the true value of a parameter (which is fixed, even if unknown).
- \end{block}
+ \end{block}}
 
 
 \end{frame}
@@ -248,9 +283,9 @@ inference and to inform informal application.
 \begin{frame}
  \frametitle{Random variable}
  
- \includegraphics[width=0.45\textwidth]{randomvar.pdf}\hfill
+ \uncover<2->{\includegraphics[width=0.45\textwidth]{randomvar.pdf}\hfill}
 %  \includegraphics[width=0.32\textwidth]{randomvar2.pdf}\hfill
- \includegraphics[width=0.45\textwidth]{randomvar3.pdf}
+ \uncover<3>{\includegraphics[width=0.45\textwidth]{randomvar3.pdf}}
  
  \begin{block}{Random variable: definition}
   A random variable is a variable whose possible values are outcomes of a random phenomenon. It usually denoted with a capital letter (e.g. $X$).
@@ -263,27 +298,29 @@ inference and to inform informal application.
  Examples:
  
  \begin{itemize}
-  \item $x$: \only<2>{lifetime of a particle? $\Omega = [0, +\infty [$}
+  \item<2-> $x$: lifetime of a particle? $\Omega = [0, +\infty [$
 %   \item $y$: \only<2>{measurement of the azimuthal angle?}
-  \item $z$: \only<2>{tossing of a coin? (heads = 0, tails = 1) $\Omega = \{0,1\}$}
+  \item<3> $z$: tossing of a coin? (heads = 0, tails = 1) $\Omega = \{0,1\}$
  \end{itemize}
 \end{frame}
 
 \begin{frame}
  \frametitle{Mathematical probability}
  
+ \mynote{Écrire au tableau avant}
+ 
  \begin{block}{Definition}
   Given a random variable $X$ and a sample space $\Omega$, a function $P$ is a probability if it obeys the \textbf{Kolmogorov axioms}:
   
   \begin{enumerate}
-   \item<1-> $\forall x \in \Omega, P(x) \geq 0$ (and $P(x) \in \mathbb{R})$
-   \item<2-> $\forall A, B \subset \Omega / A \cap B = \emptyset, P(A \cup B) = P(A) + P(B) $
-   \item<3-> $P(\Omega) = 1, P(\emptyset)=0$ 
+   \item<2-> $\forall x \in \Omega, P(x) \geq 0$ (and $P(x) \in \mathbb{R})$
+   \item<3-> $\forall A, B \subset \Omega / A \cap B = \emptyset, P(A \cup B) = P(A) + P(B) $
+   \item<4-> $P(\Omega) = 1, P(\emptyset)=0$ 
   \end{enumerate}
 
  \end{block}
  
- \uncover<4>{
+ \uncover<5>{
  In other words, in the discrete case $\Omega = \{ x_i \}$
  
  \begin{enumerate}
@@ -298,6 +335,8 @@ inference and to inform informal application.
 \begin{frame}
  \frametitle{Frequentist probability}
  
+ \mynote{Écrire au tableau (au moins l'équation)}
+ 
  \begin{block}{Definition}
  Frequentist probability is defined in an empiric way. Given a random variable $X$ and a sample space $\Omega$, we repeat the experiment $N$ times and measure the outcome of $X$.
  
@@ -307,14 +346,16 @@ inference and to inform informal application.
 \end{block}
 
 \begin{itemize}
- \item Important implication: frequentist probability can only be applied to repeatable experiments. The frequentist probability that it rains tomorrow cannot be defined!
- \item In particular: $P(\text{constant of nature} \in \text{(some interval)})$ or $P(\text{SUSY is true})$ \alert{do not exist} (in a usueful way) for this definition of $P$ (at least in one universe).
+ \item<2-> Important implication: frequentist probability can only be applied to repeatable experiments. The frequentist probability that it rains tomorrow cannot be defined!
+ \item<3-> In particular: $P(\text{constant of nature} \in \text{(some interval)})$ or $P(\text{SUSY is true})$ \alert{do not exist} (in a usueful way) for this definition of $P$ (at least in one universe).
 \end{itemize}
 
 \end{frame}
 
 \begin{frame}
  \frametitle{Bayesian probability}
+ 
+ \mynote{Écrire au tableau avant}
  
  \begin{block}{definition}
   Bayesian probability is subjective and can be for instance defined using the \emph{degree of belief} (Finetti), with the notion of \emph{coherent bet}:
@@ -323,10 +364,10 @@ inference and to inform informal application.
  \end{block}
  
  \begin{itemize}
-  \item Bayesian is as much a property of the observer as of the system being observed.
-  \item It depends on the state of the observer's knowledge, and will in general change as the observer obtains more knowledge.
-  \item $P(\text{constant of nature} \in \text{(some interval)})$ or $P(\text{SUSY is true})$ exist for you!
-  \item Shown to be basis for coherent personal decision making.
+  \item<2-> Bayesian is as much a property of the observer as of the system being observed.
+  \item<3-> It depends on the state of the observer's knowledge, and will in general change as the observer obtains more knowledge.
+  \item<4-> $P(\text{constant of nature} \in \text{(some interval)})$ or $P(\text{SUSY is true})$ exist for you!
+%   \item Shown to be basis for coherent personal decision making.
  \end{itemize}
 
 
@@ -334,6 +375,8 @@ inference and to inform informal application.
 
 \begin{frame}
  \frametitle{Properties of probabitilies}
+ 
+ \mynote{Écrire au tableau}
  
  \begin{block}{Addition law}
   Given $A, B \subset \Omega$, 
@@ -353,6 +396,18 @@ inference and to inform informal application.
 
 
 \end{frame}
+
+\begin{frame}
+ \frametitle{Bayes' theorem}
+ 
+ \mynote{Écrire au tableau}
+ 
+ \begin{block}{Bayes' theorem}
+  $$P(A|B) = \frac{P(B|A) P(A)}{P(B)}$$
+ \end{block}
+
+\end{frame}
+
 
 \begin{frame}
  \frametitle{Graphical illustration and ``derivation'' of Bayes' Theorem}
@@ -381,38 +436,42 @@ inference and to inform informal application.
 \begin{frame}
  \frametitle{Example of Bayes' theorem using frequentist probability}
  
- A b-tagging method is developed and one measures:
+ \mynote{Écrire au tableau}
+ 
+ A muon identificatoin is developed and one measures:
  
  \begin{itemize}
-  \item $P(\text{btag} | \text{b-jet})$, i.e., efficiency for tagging b’s
-  \item $P(\text{btag} | \text{not a b-jet})$, i.e., efficiency for background
-  \item $P(\text{no btag} | \text{b-jet}) = 1 - P(\text{btag} | \text{b-jet})$
-  \item $P(\text{no btag} | \text{not a b-jet}) = 1 - P(\text{btag} | \text{not a b-jet})$
+  \item $P(\text{muon ID} | \text{muon})$, i.e., efficiency for tagging muons
+  \item $P(\text{muon ID} | \text{not a muon})$, i.e., efficiency for background
+  \item $P(\text{no muon ID} | \text{muon}) = 1 - P(\text{muon ID} | \text{muon})$
+  \item $P(\text{no muon ID} | \text{not a muon}) = 1 - P(\text{muon ID} | \text{not a muon})$
  \end{itemize}
  
  \vspace{10pt}
  
-Question: Given a selection of jets tagged as b-jets, what
-fraction of them is b-jets? I.e., what is $P(\text{b-jet} | \text{btag})$ ?
+\textbf{Question}: Given a selection of particles identified as muons, what
+fraction of them is muons? I.e., what is $P(\text{muon} | \text{muon ID})$ ?
 
 \vspace{10pt}
 
 \uncover<2>{
-Answer: Cannot be determined from the given information!
+\textbf{Answer}: \structure{Cannot be determined from the given information!}
 
-Need in addition: $P(\text{b-jet})$, the true fraction of all jets that are
-b-jets. Then Bayes’ theorem inverts the conditionality:
+Need in addition: $P(\text{muon})$, the true fraction of all particles that are
+muons. Then Bayes’ theorem inverts the conditionality:
 
-$$P(\text{b-jet} | \text{btag}) \propto P(\text{btag} |\text{b-jet}) P(\text{b-jet})$$
+$$P(\text{muon} | \text{muon ID}) \propto P(\text{muon ID} |\text{muon}) P(\text{muon})$$
 }
 
 \end{frame}
 \begin{frame}
  \frametitle{Example of Bayes' theorem using frequentist probability}
  
- In HEP, as noted, $P(\text{btag} | \text{b-jet})$ is called the \emph{efficiency} for tagging b’s.
+ \mynote{Écrire au tableau}
  
- Meanwhile $P(\text{b-jet} | \text{btag})$ is often called the \emph{purity} of a sample of b-tagged jets.
+ In HEP, as noted, $P(\text{muon ID} | \text{muon})$ is called the \emph{efficiency} for tagging muons.
+ 
+ Meanwhile $P(\text{muon} | \text{muon ID})$ is often called the \emph{purity} of a sample of particles identified as muons.
  
 As this is a pretty ``easy'' distinction, it is helpful to keep it in mind when one encounters cases where it is perhaps tempting to make the logical error of equating $P(A|B)$ and $P(B|A)$.
 
@@ -421,9 +480,11 @@ As this is a pretty ``easy'' distinction, it is helpful to keep it in mind when 
 \begin{frame}
  \frametitle{Example  of Bayes' theorem using Bayesian probability}
  
+ \mynote{Écrire au tableau}
+ 
  In a background-free experiment, a theorist uses a ``model'' to
 predict a signal with Poisson mean of 3 events. From Poisson
-formula we know:
+formula we (soon will) know:
 
 \begin{itemize}
  \item $P(\text{0 events} | \text{model true}) = 3^0 e^{-3}/0! = 0.05$
@@ -436,12 +497,12 @@ The experiment is performed and \emph{zero events are observed}.
 
 \vspace{10pt}
 
-Question: Given the result of the expt, what is the probability that
+\textbf{Question}: Given the result of the expt, what is the probability that
 the model is true? I.e., What is $P(\text{model true} | \text{0 events})$ ?
 
 \vspace{10pt}
 
-\uncover<2>{Answer: Cannot be determined from the given information!
+\uncover<2>{\textbf{Answer}: \structure{Cannot be determined from the given information!}
 
 Need in addition: $P(\text{model true})$, the degree of belief in the
 model prior to the experiment. Then Bayes’ theorem inverts the
@@ -459,6 +520,8 @@ $$P(\text{model true} | \text{0 events}) = \frac{0.05  P(\text{model true})}{1 -
 \begin{frame}
  \frametitle{Example  of Bayes' theorem using Bayesian probability}
  
+ \mynote{Écrire au tableau}
+ 
  $$P(\text{model true} | \text{0 events}) = \frac{0.05  P(\text{model true})}{1 - 0.95 P(\text{model true})}$$
  
 Limiting cases to lowest order in $\epsilon$, with $\epsilon \ll 1$:
@@ -467,7 +530,7 @@ Limiting cases to lowest order in $\epsilon$, with $\epsilon \ll 1$:
 
 Let ``model'' be the Standard Model of particle physics, prior $P(\text{model true}) = 1 - \epsilon$, then $P(\text{model true} | \text{0 events}) \approx 1 - 20\epsilon$
 
-Still very high degree of belief! Tempting mistake: ``$P(\text{0 events} | \text{model true}) = 5\%$, and 0 events observed, means there is 5\% chance the S.M. is true'' (UGH!)
+Still very high degree of belief! Tempting mistake: ``$P(\text{0 events} | \text{model true}) = 5\%$, and 0 events observed, means there is 5\% chance the S.M. is true'' \structure{(never write this...)}
 
 \vspace{10pt}
 
@@ -504,6 +567,8 @@ quantifies the relative costs (to You) of
  \item Type I error (declaring model false when it is true), and
  \item Type II error (not declaring model false when it is false).
 \end{itemize}
+
+\structure{We'll come back to this later (when we go to hypothesis testing).}
 }
 
 \end{frame}
@@ -534,6 +599,7 @@ simplistic for ``deciding'' in important situations.
 \begin{frame}
  \frametitle{Discrete random variables $X$}
  
+ \mynote{Écrire au tableau}
  
   $X \in \Omega = \{ x_1, x_2, \dots, x_N \}$ (where $N \in \mathbb{N} \cup \{+\infty\}$)
   
@@ -548,6 +614,7 @@ simplistic for ``deciding'' in important situations.
  
  \begin{frame}
  \frametitle{Continuous random variables $X$}
+ \mynote{Écrire au tableau}
  
  \begin{block}{Cumulative function}
   $X \in \Omega = [a,b]$ where $(a,b) \in (\mathbb{R} \cup \{-\infty,+\infty\})^2$
@@ -555,14 +622,16 @@ simplistic for ``deciding'' in important situations.
   The probability law is defined using a function $F(x_0) = P(x \leq x_0)$, called the \alert{cumulative function}.
  \end{block}
  
+ \uncover<2->{
  The cumulative function is such that:
  
  \begin{itemize}
   \item $F(b) = 1$
   \item $F(a) = 0$
   \item $\forall x \in [a,b], \frac{\dd F}{\dd x}(x) \geq 0$
- \end{itemize}
+ \end{itemize}}
 
+ \uncover<3->{
  \begin{block}{Probability density function (pdf)}
   The probability density function is defined as:
   
@@ -571,7 +640,7 @@ simplistic for ``deciding'' in important situations.
   or, in other words:
   
   $$f(x) = \frac{\dd F}{\dd x}(x)$$
- \end{block}
+ \end{block}}
 
 
 
@@ -580,32 +649,33 @@ simplistic for ``deciding'' in important situations.
 \begin{frame}
  \frametitle{Multi-dimensional variable}
  
- Example: $X = (x,y,z)$. 
+ Example: $\vec{X} = (x,y,z)$. 
  Then $P(x \in [x_0, x_0 + \dd x], y \in [y_0, y_0 + \dd y], z \in [z_0, z_0 + \dd z]) = f(x_0,y_0,z_0) \dd x \dd y \dd z$ where $f$ is the pdf.
  
- \begin{block}{Definition: marginal pdf}
+ \uncover<2->{\begin{block}{Definition: marginal pdf}
   $$f_X (x) = \int \dd y^\prime \dd z^\prime\, f(x,y^\prime,z^\prime)$$
   
   $f_X$ is a \textbf{projection} of $f$
- \end{block}
+ \end{block}}
  
- \begin{block}{Definition: conditional pdf}
+ \uncover<3->{\begin{block}{Definition: conditional pdf}
   $$f_C (x, y_0, z_0) = \frac{f(x,y_0,z_0)}{\int \dd x^\prime f(x^\prime, y_0, z_0)}$$
   
   $f_C$ is a \textbf{``section''} of $f$
- \end{block}
+ \end{block}}
 
+ \uncover<4>{
  \begin{block}{Definition: independent variables}
   Given two random variables $X$ and $Y$, \\
   $X$ and $Y$ are independent iff $f(x,y) = f_X(x) f_Y(y)$.
- \end{block}
-
-
+ \end{block}}
  
 \end{frame}
 
 \begin{frame}
  \frametitle{Change of variable}
+ 
+ \mynote{Écrire au tableau}
  
  Let $f(\vec{x})$ be a pdf and a change of variables $h: \vec{x} \mapsto \vec{y} = h(\vec{x})$, $[\vec{x}, \vec{x} + \dd\vec{x}] \to [\vec{y}, \vec{y} + \dd\vec{y}]$
  
@@ -613,7 +683,7 @@ simplistic for ``deciding'' in important situations.
  
  \structure{What is the pdf of $\vec{y}$: $g(\vec{y})$?}
  
- \uncover<2>{\only<2>{
+ \uncover<2>{
  \begin{block}{If $x$ and $y$ are scalars, and $h$ bijective}
   \begin{eqnarray}
    g(y) \dd y & = & f(x) \dd x \nonumber \\
@@ -625,10 +695,23 @@ simplistic for ``deciding'' in important situations.
 
  \end{block}
 
- }}
+ }
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Change of variable}
  
- \only<3>{
- \begin{block}{If $x$ and $y$ are scalars, and $h$ bijective}
+ \mynote{Écrire au tableau}
+ 
+ Let $f(\vec{x})$ be a pdf and a change of variables $h: \vec{x} \mapsto \vec{y} = h(\vec{x})$, $[\vec{x}, \vec{x} + \dd\vec{x}] \to [\vec{y}, \vec{y} + \dd\vec{y}]$
+ 
+ \vspace{10pt}
+ 
+ \structure{What is the pdf of $\vec{y}$: $g(\vec{y})$?}
+ 
+ 
+ \begin{block}{If $x$ and $y$ are scalars, and $h$ not bijective}
   Several $[x_i,x_i+\dd x]$ correspond to a given $[y,y+\dd y]$
   
   Then \structure{$$g(y) = \sum{i, h(x_i) = y} \frac{f(x_i)}{|h^\prime(x_i)|}$$}
@@ -642,16 +725,26 @@ simplistic for ``deciding'' in important situations.
  \end{itemize}
 
 
- }
+\end{frame}
+
+\begin{frame}
+ \frametitle{Change of variable}
  
- \only<4>{
+ \mynote{Écrire au tableau}
+ 
+ Let $f(\vec{x})$ be a pdf and a change of variables $h: \vec{x} \mapsto \vec{y} = h(\vec{x})$, $[\vec{x}, \vec{x} + \dd\vec{x}] \to [\vec{y}, \vec{y} + \dd\vec{y}]$
+ 
+ \vspace{10pt}
+ 
+ \structure{What is the pdf of $\vec{y}$: $g(\vec{y})$?} 
+
  \begin{block}{Case of multiple dimensions and a bijective $h$}
   \structure{$$g(\vec{y}) = \frac{f(\vec{x})}{\left| \det \left( \frac{\partial \vec{h}}{\partial \vec{x}} \right) \right|}$$}
   
   The denominator is the jacobian of the transformation.
  \end{block}
 
- }
+
  
 \end{frame}
 
@@ -660,12 +753,16 @@ simplistic for ``deciding'' in important situations.
 \begin{frame}
  \frametitle{Properties of pdfs}
  
+ \mynote{Écrire au tableau}
+ 
  $$X,\qquad f(x),\qquad x \in \Omega$$
   
 \end{frame}
 
 \begin{frame}
  \frametitle{Properties of pdfs}
+ 
+ \mynote{Écrire au tableau}
  
  \begin{block}{Expectation of a function, $g(X)$}
   
@@ -683,6 +780,8 @@ simplistic for ``deciding'' in important situations.
 
 \begin{frame}
  \frametitle{Properties of pdfs}
+ 
+ \mynote{Écrire au tableau}
 
  \begin{block}{Variance $V$, standard deviation $\sigma$}
   \begin{eqnarray}
@@ -700,6 +799,8 @@ simplistic for ``deciding'' in important situations.
 \begin{frame}
  \frametitle{Moments}
  
+ \mynote{Écrire au tableau}
+ 
  \begin{block}{Definition}
   \begin{itemize}
    \item Central moment: $E\left[ (X-\mu)^n \right]$
@@ -715,11 +816,18 @@ simplistic for ``deciding'' in important situations.
   \item $n=4$ central moment: \structure{kurtosis}. Measures the size of the tails of the distribution (if positive, then larger tails than a Gaussian).
  \end{itemize}
 
+ \begin{center}
+  \includegraphics[width=0.6\textwidth]{Negative_and_positive_skew_diagrams}
+  \includegraphics[width=0.35\textwidth]{Standard_symmetric_pdfs_logscale.png}
+ \end{center}
+
  
 \end{frame}
 
 \begin{frame}
  \frametitle{Characteristic function of a pdf}
+ 
+ \mynote{Écrire au tableau}
  
  \begin{block}{Definition}
   \begin{eqnarray}
@@ -756,25 +864,33 @@ simplistic for ``deciding'' in important situations.
 \begin{frame}
  \frametitle{Case of several variables}
  
+ \mynote{Écrire au tableau}
+ 
  \begin{block}{Covariance $C(X,Y)$}
+ \vspace{-7pt}
   $$C(X,Y) \equiv E \left( (X-\mu_X) (Y-\mu_Y) \right) = E(XY) - E(X) E(Y)$$
+  \vspace{-7pt}
  \end{block}
  
- \begin{block}{Correlation coeffcient (or Pearson coefficient)}
+ \uncover<2->{\begin{block}{Correlation coeffcient (or Pearson coefficient)}
+ \vspace{-7pt}
   $$\rho(X,Y) \equiv \frac{C(X,Y)}{\sigma_X \sigma_Y}$$
- \end{block}
+  \vspace{-7pt}
+ \end{block}}
  
- \begin{block}{Schwartz lemma}
-  $|\rho(X,Y)| \leq 1$
- \end{block}
+ \uncover<3->{\begin{block}{Schwartz lemma}
+ \vspace{-7pt}
+  $$|\rho(X,Y)| \leq 1$$
+  \vspace{-7pt}
+ \end{block}}
 
- Demo of the Schwartz lemma:
+ \uncover<4->{Proof of the Schwartz lemma:
  
  $$\forall \alpha, V(\alpha X + Y) = \alpha^2 V(X) + V(Y) + 2 \alpha C(X,Y) \geq 0$$
  
  This quadratic form can have one solution at most, hence its determinant is $\leq 0$: 
  
- $$C(X,Y)^2 - V(X) V(Y) \leq 0 \quad \text{(QED)}$$ 
+ $$C(X,Y)^2 - V(X) V(Y) \leq 0$$ }
 
 
 \end{frame}
@@ -782,12 +898,15 @@ simplistic for ``deciding'' in important situations.
 \begin{frame}
  \frametitle{Covariance: special cases}
  
+ \mynote{Écrire au tableau}
+ 
  \begin{block}{Independent variables}
   $$X,Y \text{ independent} \Rightarrow C(X,Y) =0, \rho(X,Y) = 0$$
   
   NB: the opposite is not true (can have $C(X,Y)=0$ but $X$ and $Y$ not independent).
  \end{block}
  
+ \uncover<2>{
  \begin{columns}
   \begin{column}{0.27\textwidth}
    \includegraphics[width=\textwidth]{circle}
@@ -814,12 +933,14 @@ simplistic for ``deciding'' in important situations.
    $\rho=-1$,\\ complete anti-correlation
   \end{column}
  \end{columns}
-
+}
 
 \end{frame}
 
 \begin{frame}
  \frametitle{Covariance matrix}
+ 
+ \mynote{Écrire au tableau}
  
  \begin{block}{}
   $$\vec{X} = (X_1, \dots, X_N)$$
@@ -834,9 +955,10 @@ $$
  \end{block}
  
  \begin{block}{Properties}
+ 
   \begin{itemize}
    \item The covariance matrix is symmetric.
-   \item All its eigen values are positive.
+   \item It is positive semi-definite: all its eigen values are positive.
   \end{itemize}
 
  \end{block}
@@ -845,6 +967,8 @@ $$
 
 \begin{frame}
  \frametitle{Covariance matrix: linear change of variables}
+ 
+ \mynote{Écrire au tableau}
  
  \begin{block}{Linear change of variables $\vec{Z} = A \vec{X} + B$}
   $$V_{\vec{Z}} = A\, V_{\vec{X}}\, ^t A$$
@@ -859,6 +983,8 @@ $$
  
 \begin{frame}
   \frametitle{Error propagation}
+  
+  \mynote{Écrire au tableau}
   
   \begin{alertblock}{}
    Error propagation: this is why ``errors add in quadrature''! (\textbf{in the uncorrelated case})
@@ -883,10 +1009,12 @@ $$
  \begin{frame}
 \frametitle{Covariance matrix: nonlinear change of variables}
 
+\mynote{Écrire au tableau}
+
  \begin{block}{Nonlinear change of variables $\vec{Y} = \vec{H} (\vec{X})$}
   There is no exact formula for $V_{\vec{Y}}$. However,
   
-  $$V_{\vec{Y}} = D V_{\vec{X}} D^{-1}$$
+  $$V_{\vec{Y}} \approx D V_{\vec{X}} D^{-1}$$
   
   where $D$ is the matrix of the derivatives (which determinant is the Jacobian), evaluated in $\vec{X}_0 = E(\vec{X})$.
  \end{block}
@@ -897,6 +1025,8 @@ $$
 \begin{frame}
  \frametitle{Error propagation: a summary of common cases}
  
+ \mynote{Écrire au tableau... seulement Independent et Fully correlated, et seulement 1st et last line}
+ 
  \includegraphics[width=1.1\textwidth]{propagation_errors_table.png}
 \end{frame}
 
@@ -904,17 +1034,18 @@ $$
 \begin{frame}
  \frametitle{Application: sample mean}
  
- 
+ \mynote{Écrire au tableau}
  
   Assume $N$ realisations of $X$ for $N$ independent trials. For each trial, we have a pdf $f(x)$ with mean $\mu$ and variance $\sigma^2$. 
   
   Define $\bar{X} = \frac{1}{N} \sum_{i=1}^{N} X_i$
   
+  \uncover<2>{
   \begin{itemize}
    \item $E(\bar{X}) = \frac{1}{N} \sum_i E(X_i) = \frac{1}{N} N \mu = \mu$ 
    \item $V(\bar{X}) = \frac{\sigma^2}{N}$
   \end{itemize}
- 
+ }
 
 \end{frame}
 
@@ -928,6 +1059,8 @@ $$
 
 \begin{frame}
  \frametitle{Binomial law}
+ 
+ \mynote{Écrire au tableau}
  
  Let $X$ be a random variable, with $x \in \Omega$, and let $A \subset \Omega$, with $P(A) = p$
  
@@ -948,6 +1081,8 @@ $$
 
 \begin{frame}
  \frametitle{Multinomial law}
+ 
+ \mynote{Écrire au tableau}
  
  Let there be $K$ exclusive realisations: $Q_1, Q_2, \dots, Q_K$, with respective probabilities $p_1, p_2, \dots, p_K$ ($\sum_{i=1}^K p_i = 1$)
  
@@ -972,6 +1107,8 @@ $$
 
 \begin{frame}
  \frametitle{Poisson law}
+ 
+ \mynote{Écrire au tableau}
  
  Typical case: probability of observing $n$ events during $\Delta t$, knowing that events come with a rate $\mu$. 
  \structure{It is the limit of the binomial law, with $N \to \infty$, $p \to 0$, $Np = \mu$}
@@ -1001,6 +1138,8 @@ $$
 \begin{frame}
  \frametitle{Sum of Poisson laws}
  
+ \mynote{Écrire au tableau}
+ 
  Sum of independent Poisson laws:
  
  \begin{itemize}
@@ -1010,7 +1149,7 @@ $$
  
  $$P(N) = P_{\mu = \mu_1 + \dots + \mu_K}(N)$$
  
- The sum of Poisson laws is a Poisson law which mean is the sum of the individual means.
+ \structure{The sum of Poisson laws is a Poisson law which mean is the sum of the individual means.}
 
 \end{frame}
 
@@ -1024,6 +1163,8 @@ $$
 
 \begin{frame}
  \frametitle{Exponential law}
+ 
+ \mynote{Écrire au tableau}
  
  \begin{block}{Exponential law}
   $f_\tau (t) = \frac{1}{\tau} e^{-t/\tau}$
@@ -1045,6 +1186,8 @@ $$
 \begin{frame}
  \frametitle{Normal law (Gaussian)}
  
+ \mynote{Écrire au tableau}
+ 
  \begin{block}{Normal law}
   $$f_{\mu,\sigma} (x) = \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
  \end{block}
@@ -1064,13 +1207,15 @@ $$
 \begin{frame}
  \frametitle{Normal law: some numbers}
  
+ \mynote{Écrire au tableau}
+ 
  \begin{center}
   \begin{tabular}{c|c}
    FWHM\footnote{Full Width Half Maximum} & $\approx 2 \times 1.176 \sigma$ \\
-   $P(-\sigma \leq x-\mu \leq \sigma$ & $\approx 0.68$ \\
-   $P(-1.64 \sigma \leq x-\mu \leq 1.64 \sigma$ & 0.90 \\
-   $P(-1.96 \sigma \leq x-\mu \leq 1.96 \sigma$ & 0.95 \\
-   $P(-3.24 \sigma \leq x-\mu \leq 3.24 \sigma$ & 0.999 
+   $P(-\sigma \leq x-\mu \leq \sigma$) & $\approx 0.68$ \\
+   $P(-1.64 \sigma \leq x-\mu \leq 1.64 \sigma)$ & 0.90 \\
+   $P(-1.96 \sigma \leq x-\mu \leq 1.96 \sigma)$ & 0.95 \\
+   $P(-3.24 \sigma \leq x-\mu \leq 3.24 \sigma)$ & 0.999 
   \end{tabular}
 
  \end{center}
@@ -1079,6 +1224,8 @@ $$
 
 \begin{frame}
  \frametitle{Normal law of several variables}
+ 
+ \mynote{Écrire au tableau}
  
  \begin{block}{Normal law of $K$ variables}
   $$f(\vec{X}) = \frac{1}{2\pi^{K/2} |\det V|^{1/2}} \exp \left( -\frac{1}{2} \left(\vec{X}-\vec{\mu}\right) V^{-1}  \left(\vec{X}-\vec{\mu}\right)^\text{T} \right)$$
@@ -1110,6 +1257,8 @@ $$
 \begin{frame}
  \frametitle{Uniform distribution}
  
+ \mynote{Écrire au tableau}
+ 
  \begin{block}{Uniform distribution}
   For $x \in [a,b]$:
   
@@ -1129,6 +1278,8 @@ $$
 
 \begin{frame}
  \frametitle{$\chi^2$ distribution}
+ 
+ \mynote{Écrire au tableau}
  
  \begin{block}{$\chi^2$ distribution}
   $$f(x) = \frac{\frac{1}{2} \left( \frac{x}{2} \right)^{\frac{N}{2}-1} e^{-\frac{x}{2}}}{\Gamma(N/2)}$$
@@ -1159,6 +1310,8 @@ $$
 \begin{frame}
  \frametitle{Other distributions}
  
+ \mynote{Écrire au tableau}
+ 
  \begin{description}
   \item[Cauchy distribution] (or Breit-Wigner): wider than a Gaussian, with undefined moments
   \item[Student's $t$]: kurtosis $>0$ (Cauchy is a special case of Student's $t$)
@@ -1177,6 +1330,8 @@ $$
 \begin{frame}
  \frametitle{Asymptotic approach}
  
+ \mynote{Écrire au tableau}
+ 
  Go back to the binomial law: $$B_{N,p}(n) = \frac{N!}{n!(N-n)!} p^n (1-p)^n$$
  
  Let us define $f_N = \frac{n}{N}$
@@ -1192,13 +1347,15 @@ $$
 \begin{frame}
  \frametitle{Law of large numbers}
  
+ \mynote{Écrire au tableau}
+ 
  \begin{block}{Definition: convergence in probability}
   A sequence $\{X_n\}$ of random variables converges in probability towards the random variable $X$ if for all $\varepsilon > 0$
 
     $$ \lim _{n\to \infty }P \left( |X_{n}-X|>\varepsilon \right)=0$$
  \end{block}
  
- \begin{block}{Definition: convergence in probability}
+ \begin{block}{Definition: convergence in $r$-th mean}
   A sequence $\{X_n\}$ of random variables converges in $r$-th mean towards the random variable $X$ if
 
     $$ \lim _{n\to \infty } E(|X_n - X|^r)=0$$
@@ -1214,6 +1371,8 @@ $$
 
 \begin{frame}
  \frametitle{Law of large numbers}
+ 
+ \mynote{Écrire au tableau}
  
  Let $\{X_N\}$ be a sequence of random variables, such that $\forall i, \langle x_i \rangle = \mu$ and $\sigma^2_i = \sigma^2$. 
  
@@ -1239,6 +1398,8 @@ $$
 \begin{frame}
  \frametitle{Law of large numbers: example}
  
+ \mynote{Écrire au tableau}
+ 
  Let $g(x)$ be a function. One wants to compute the integral of $g$ using a Monte-Carlo method.
  
  $$E[g] = \int_a^b g(u) f(u) \dd u$$
@@ -1262,11 +1423,13 @@ It is the integration of $g$ using the \textbf{Monte-Carlo method}. Compared to 
 \begin{frame}
  \frametitle{Central limit theorem: prelude}
  
+ \mynote{Écrire au tableau}
+ 
  Let $X$ be a random variable of pdf $f(x)$, with $E(X) = \bar{X}$, $V(x) = \sigma^2$. We get $N$ independent realisations $\{ x_1 \dots x_N \}$.
  
  \begin{itemize}
-  \item $S_N = \sum_{i=1}^N x_i$ has mean $N \bar{X}$ and variance $N \sigma^2$.
-  \item $S_N = \frac{1}{N} \sum_{i=1}^N x_i$ has mean $\bar{X}$ and variance $\propto \frac{1}{N} \xrightarrow[N\to\infty]{}0$.
+  \item $S_N\sum_{i=1}^N x_i$ has mean $N \bar{X}$ and variance $N \sigma^2$.
+  \item $\frac{1}{N} S_N = \frac{1}{N} \sum_{i=1}^N x_i$ has mean $\bar{X}$ and variance $\propto \frac{1}{N} \xrightarrow[N\to\infty]{}0$.
  \end{itemize}
 
  \begin{itemize}
@@ -1280,7 +1443,11 @@ It is the integration of $g$ using the \textbf{Monte-Carlo method}. Compared to 
 \begin{frame}
  \frametitle{Central limit theorem}
  
- Let $\{ X_1 \dots X_N\}$ be a sequence of random variables, of pdf $f_i(X)i)$, with mean $\mu_i$ and variance $\sigma_i^2$. 
+ \mynote{Écrire au tableau}
+ 
+ Let $\{ X_1 \dots X_N\}$ be a sequence of random variables, of pdf $f_i(X_i)$, with mean $\mu_i$ and variance $\sigma_i^2$.
+ 
+ \begin{footnotesize}(Note: to much is required about the pdfs, except that the mean and variance should exist, and $\sigma_i$ should not increase ``too rapidly'' with $i$) \end{footnotesize}
  
  $S_N$, as defined previously, has mean $\sum_{i=1}^N \mu_i$ and variance $\sum_{i=1}^N \sigma_i^2$.
  
@@ -1296,6 +1463,8 @@ It is the integration of $g$ using the \textbf{Monte-Carlo method}. Compared to 
 
 \begin{frame}
  \frametitle{Central limit theorem: proof}
+ 
+ \mynote{Écrire au tableau}
  
  We define $Y_N = \frac{\sum_{i=1}^N x_i}{N}$, $Z_N = \frac{Y_N - \mu}{\sigma \sqrt{N}}$, with $E(X_i) = \mu = 0$ and $V(X_i) = \sigma^2,\,\forall i$.
  
