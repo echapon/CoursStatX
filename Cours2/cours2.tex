@@ -1,4 +1,5 @@
 \documentclass[9pt]{beamer}
+% \documentclass[9pt,handout]{beamer}
 
 \usepackage{ucs}
 \usepackage[utf8x]{inputenc}
@@ -29,13 +30,33 @@
 
 \setbeamertemplate{navigation symbols}{}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \setbeameroption{show notes} % un-comment to see the notes
+% \setbeamertemplate{note page}[plain]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newif\ifmynote
+% \mynotetrue
+\mynotefalse
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newif\ifmyhide
+\myhidetrue
+% \myhidefalse
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand\mynote[1]{%
+\ifmynote \textbf{#1} \else \fi
+}
+\newcommand\myhide[1]{%
+\ifmyhide \vspace{15pt} \begin{center} \myexample{(blackboard)}\end{center} \vspace{15pt} \else #1 \fi
+}
+
  \newcolumntype{x}[1]{%
 >{\centering\hspace{0pt}}p{#1}}%
 \newcommand{\tn}{\tabularnewline}
 
 \date[Stat2]{Sept. 27, 2018}
 \title{Methods of statistical analysis and simulation}
-\subtitle{Cours 2}
+\subtitle{2. Parameter estimation}
 \author[E. Chapon]{Émilien Chapon}
 % \institute[(CERN)]{CERN}
 % \logo{\includegraphics[height=0.6cm]{../../CMS-Color-Label.pdf}\hspace{1.05\textwidth}\includegraphics[height=0.6cm]
@@ -71,9 +92,11 @@
 \begin{frame}
  \frametitle{The likelihood function}
  
+ 
  We discuss a random variable $X$, with pdf $f(X|\theta)$, where $\theta$ is a real parameter (or a set of $k$ real parameters).
  The set of allowed values of $X$ is denoted $\Omega_\theta$.
  
+\myhide{
  We consider $N$ independent observations of $X$: $X_1,\dots,X_N$. The joint pdf is, by independence,
  
  $$P(\vec{X}|\theta) = P(X1,\dots,X_N)|\theta) = \prod_{i=1}^N f(X_i|\theta)$$
@@ -83,7 +106,8 @@
   
   $$\mathcal{L}(\theta) = P(X^0|\theta)$$
  \end{block}
-
+ 
+}
   
 \end{frame}
 
@@ -135,12 +159,13 @@
  \frametitle{Information of R.A. Fisher}
  
  \begin{block}{Definition}
- If $\Omega_\theta$ is independent of $\theta$, and if $\mathcal{L}(X|\theta)$ is regular enough to allow the operators $\partial^2/\partial\theta^2$ and $\int \dd X$ to comute, then
+ \myhide{If $\Omega_\theta$ is independent of $\theta$, and if $\mathcal{L}(X|\theta)$ is regular enough to allow the operators $\partial^2/\partial\theta^2$ and $\int \dd X$ to comute, then
   \begin{eqnarray}
    I_X(\theta) & = & E \left[ \left( \frac{\partial \ln \mathcal{L}(X|\theta)}{\partial \theta} \right)^2 \right] \nonumber \\
-   & = & \int_{\Omega_\theta} \left( \frac{\partial \ln \mathcal{L}(X|\theta)}{\partial \theta} \right)^2 \mathcal{L}(X|\theta) \dd X
+   & = & \int_{\Omega_\theta} \left( \frac{\partial \ln \mathcal{L}(X|\theta)}{\partial \theta} \right)^2 \mathcal{L}(X|\theta) \dd X \nonumber \\
+   & = & - E \left[ \frac{\partial^2 \ln \mathcal{L}(X|\theta)}{\partial \theta^2}  \right] \nonumber
   \end{eqnarray}
-
+}
  \end{block}
  
  NB: this is an additive property (the information of $N$ observations is $N$ times the information of 1 observation).
@@ -158,8 +183,8 @@
  Properties:
  
  \begin{itemize}
-  \item If $T$ is a sufficient statistic for $\theta$, then any strictly monotonic function of $T$ is also a sufficient statistic for $\theta$.
-  \item $T(\vec{X})$ is a sufficient statistic for $\theta$ iff the likelihood factorises as
+  \item<2-> If $T$ is a sufficient statistic for $\theta$, then any strictly monotonic function of $T$ is also a sufficient statistic for $\theta$.
+  \item<3> $T(\vec{X})$ is a sufficient statistic for $\theta$ iff the likelihood factorises as
   $$\mathcal{L}(\vec{X}|\theta) = g(T,\theta) h(\vec{X}),$$
   where:
   \begin{enumerate}
@@ -177,9 +202,9 @@
  This theorem proves that only a very restricted class of probability density functions admits a number of sufficient statistics independent of the number of observations.
  
  \begin{itemize}
-  \item Whatever $\Omega_\theta$, if there exists a number $N>1$ such that the set $X1,\dots,X_N$ admits a sufficient statistic for $\theta$, then the pdf is of the ``exponential form''
+  \item<2-> Whatever $\Omega_\theta$, if there exists a number $N>1$ such that the set $X1,\dots,X_N$ admits a sufficient statistic for $\theta$, then the pdf is of the ``exponential form''
   $$f(X|\theta) = \exp [ \alpha(X)a(\theta) + \beta(X) + c(\theta)]$$
-  \item Inversely, $(X1,\dots,X_N)$ admits a sufficient statistic for all $N>1$ (but only if $\Omega_\theta$ does not depend on $\theta$), if $f(X|\theta)$ has the exponential form,
+  \item<3> Inversely, $(X1,\dots,X_N)$ admits a sufficient statistic for all $N>1$ (but only if $\Omega_\theta$ does not depend on $\theta$), if $f(X|\theta)$ has the exponential form,
   and if the mapping $(X_1,\dots,X_N) \Rightarrow (R,X_2,\dots,X_N)$, with
   $$R = \sum_{i=1}^N \alpha(X_i),$$
   is one-to-one and continuously differentiable for all $X$. $R$ is sufficient for $\theta$, as well as any monotonic function of $R$.
@@ -189,7 +214,7 @@
 
 
 
-\section{Point estimation}
+\section{Parameter estimation on unbinned data}
 
 \begin{frame}
  \frametitle{Outline}
@@ -206,15 +231,20 @@
  
  An \textbf{estimator} is a statistic $t_N(x_1,\dots,x_N)$ that can be used to estimate $\theta_0$. It can have the following properties:
  
+ \mynote{Écrire au tableau le nom des différentes prioriétés, les afficher 1 par 1 au tableau}
+ 
  \begin{description}
-  \item[unbiased]: if $\langle t_N \rangle = \theta_0$ (otherwise the bias is $\langle t_N \rangle - \theta_0 = b_N$)
-  \item[convergent] or consistent: e.g. consistency in probability, $\forall \epsilon>0, \forall \eta>0, \exists N_0 / \forall N>N_0, P(|t_N - \theta_0|>\epsilon)<\eta$
+  \item<2->[unbiased]: if $\langle t_N \rangle = \theta_0$ (otherwise the bias is $\langle t_N \rangle - \theta_0 = b_N$)
+  \item<3->[convergent] or consistent: e.g. consistency in probability, $\forall \epsilon>0, \forall \eta>0, \exists N_0 / \forall N>N_0, P(|t_N - \theta_0|>\epsilon)<\eta$
   \begin{itemize}
    \item NB: The law of large numbers is equivalent to the statement that the sample mean is a consistent estimator of the parent mean.
   \end{itemize}
-  \item[efficient]: if $t_N$ is unbiased and that its variance $V(t_N) \xrightarrow[N\to\infty]{} \text{minimum variance}$ (this property can be only asymptotic)
-  \item[optimal]: if $t_N$ is unbiased and reaches the minimum variance bound
-  \item[robust]: if it does not depend on a hypothesis on the pdf
+  \item<4->[efficient]: if the variance of the estimator $V(t_N) \xrightarrow[N\to\infty]{} \text{minimum variance bound}$ (this property can be only asymptotic)
+  \item<5->[optimal]: if $t_N$ minimises the Mean Square Error (MSE): $\text{MSE}(t_N) = V(t_N) + b_N$
+  \begin{itemize}
+   \item NB: unbiasedness and efficiency imply optimality
+  \end{itemize}
+  \item<6>[robust]: if it does not depend on a hypothesis on the pdf
  \end{description}
 
 \end{frame}
@@ -233,6 +263,7 @@
  
  Let $\vec{X}$ be observations from a distribution with pdf $f(\vec{X}|\theta)$, the likelihood is $\mathcal{L}_{\vec{X}} = L(\vec{X}|\theta)$.
  
+ \myhide{
  \begin{block}{Cramér-Rao inequality}
  If the range of $\vec{X}$ does not depend on $\theta$, and if $\mathcal{L}_{\vec{X}}$ is sufficiently regular that differentiation with respect fo $\theta$ and integration over 
  $\theta$ commute, then:
@@ -241,9 +272,9 @@
   \geq \frac{[1+(\dd b / \dd \theta)]^2}{I_{\vec{X}}} 
   = \frac{\left( \frac{\dd \tau(\theta)}{\dd \theta} \right)^2}{E\left[ \left( \frac{\partial \ln \mathcal{L}_{\vec{X}}}{\partial \theta} \right)^2 \right]}$$
   
-  where $I_{\vec{X}}$ is the Fisher information, $I_{\vec{X}}(\theta) = E\left[ \left( \frac{\partial \ln \mathcal{L}(\vec{X}|\theta)}{\partial \theta} \right)^2 \right]$, and 
+  where $I_{\vec{X}}$ is the Fisher information, $I_{\vec{X}}(\theta) = E\left[ \left( \frac{\partial \ln \mathcal{L}(\theta|\vec{X})}{\partial \theta} \right)^2 \right]$, and 
   $\tau(\theta) \equiv E(\hat{\theta}) = \theta + b(\theta)$
- \end{block}
+ \end{block}}
 
 \end{frame}
 
@@ -256,10 +287,14 @@
   $$\mathcal{L}_{\hat{\theta}} = \exp [a(\theta)\hat{\theta} + \beta(\hat{\theta}) + c(\theta)]$$
  \end{block}
  
+ \uncover<2>{
  \begin{block}{Second part of the inequality: minimum bound variance (efficient estimator)}
-  $V(\hat{\theta}) = \frac{[1+(\dd b / \dd \theta)]^2}{I_{\vec{X}}} $ iff $ I_{\hat{\theta}} = I_{\vec{X}} $, ie iff $\hat{\theta}$ is a sufficient statistic for $\theta$, ie
-  iff $f(\vec{X}|\theta)$ is of the exponential form (Darmois' theorem).
- \end{block}
+  $V(\hat{\theta}) = \frac{[1+(\dd b / \dd \theta)]^2}{I_{\vec{X}}} $ iff $ I_{\hat{\theta}} = I_{\vec{X}} $, 
+  
+  ie iff $\hat{\theta}$ is a sufficient statistic for $\theta$, 
+  
+  ie  iff $f(\vec{X}|\theta)$ is of the exponential form (Darmois' theorem).
+ \end{block}}
 
 
 \end{frame}
@@ -268,39 +303,47 @@
 \begin{frame}
  \frametitle{Usual methods of constructing consistent estimators}
  
- We can use the law of large numbers:
- 
- $$\frac{1}{N} \sum_{i=1}^N a(X_i) \xrightarrow[N\to\infty]{} E[a(X)] = \int a(X)f(X,\theta_0)\dd X$$
  
  We will see:
  
  \begin{itemize}
   \item the moments method
   \item the maximum likelihood method
+  \item the linear least squares method
  \end{itemize}
+ 
+ \uncover<2>{NB: the last two are \textbf{implicitly defined estimators}, defined through an equation of the type $\xi(\hat{\theta})=0$}
 
  
 \end{frame}
 
+\subsection{Moments method}
 
 \begin{frame}
  \frametitle{The moments method}
+ 
+ We can use the law of large numbers:
+ 
+ $$\frac{1}{N} \sum_{i=1}^N a(X_i) \xrightarrow[N\to\infty]{} E[a(X)] = \int a(X)f(X,\theta_0)\dd X$$
  
  Let $a(X)$ such that $E[a(X)] = \int a(X) f(X;\theta) \dd X = h(\theta)$ where $h$ is known. 
  
  If $h$ is invertible, we can find the true value of $\theta$: 
  $\theta_0 = h^{-1}(E[a]) = h^{-1}\left(\int a(X) f(X;\theta) \dd X\right)$
  
+ \begin{block}{}
  The estimator is then:
  
- $$\hat{\theta} = h^{-1} \left( N^{-1} \sum_{i=1}^N a(x_i) \right)$$
+ $$\hat{\theta} = h^{-1} \left( \frac{1}{N} \sum_{i=1}^N a(x_i) \right)$$
+ \end{block}
  
- NB: $\hat{\theta}$ does not directly depend on $f$, only on the $x_i$.
+ NB: $\hat{\theta}$ does not directly depend on $f$, only on the $x_i$: this is a \textbf{robust estimator}.
 \end{frame}
 
 \begin{frame}
  \frametitle{The moments method: application}
  
+ \myhide{
  \begin{block}{1D case ($\theta \in \mathbb{R}$)}
   We take simply $a(X) = X$. Then $h(\theta_0) = \bar{X} = \mu$: it is the sample mean.
  \end{block}
@@ -308,22 +351,28 @@
  \begin{block}{ND case: $\vec{\theta} = (\theta_1,\dots,\theta_K)$}
   We take $a_j(X) = X^j$. Then $h_j(\vec{\theta}) = \mu_j(\vec{\theta})$: $j$-ith moment of $f(X;\vec{\theta})$
  \end{block}
-
+}
 
 \end{frame}
+
+
+
+\subsection{Maximum likelihood method}
 
 \begin{frame}
  \frametitle{The maximum likelihood method (ML)}
  
+ \myhide{
  In general the logarithm of $\mathcal{L}$ is used: $\ln \mathcal{L}\left(\vec{X};\theta\right) = \sum_{i=1}^N \ln f(X_i;\theta)$
  
  \begin{block}{Maximum likelihood estimator}
   $$\left. \frac{\partial (\ln \mathcal{L} \left(\vec{X};\theta\right)}{\partial \theta}\right|_{\hat{\theta}_\text{ML}} = \left.\frac{\partial}{\partial \theta} \left(  \sum_{i=1}^N \ln f(X_i;\theta) \right)\right|_{\hat{\theta}_\text{ML}} = 0$$
   
   $\hat{\theta}_\text{ML}$ is the maximum likelihood estimator of $\theta$.
- \end{block}
+ \end{block}}
 
- Note: numerical methods are often designed to look for a minimum rather than a maximum. $-2 \ln \mathcal{L}$ is more commonly used.
+ \uncover<2>{Note: numerical methods are often designed to look for a minimum rather than a maximum. $-2 \ln \mathcal{L}$ is more commonly used.}
+ 
 \end{frame}
 
 \begin{frame}
@@ -331,22 +380,26 @@
  
  This estimator is 
  \begin{itemize}
-  \item asymptotically efficient
-  \item biased (except when the likelihood is of the exponential form)
-  \item non optimal (except when the likelihood is of the exponential form)
-  \item convergent
-  \item invariant: the ML estimate $\hat{\tau}$ of a function $\tau(\theta)$ is $\hat{\tau} = \tau(\hat{\theta})$
+  \item<1-> \textbf{asymptotically efficient}
+  \item<2-> \textbf{biased} (except when the likelihood is of the exponential form)
+  \item<3-> \textbf{non optimal} (except when the likelihood is of the exponential form)
+  \item<4-> \textbf{convergent}
+  \item<5-> \textbf{invariant}: the ML estimate $\hat{\tau}$ of a function $\tau(\theta)$ is $\hat{\tau} = \tau(\hat{\theta})$
   \begin{itemize}
    \item However other properties of the MLE (e.g. the bias) are not invariant under change of parameter.
   \end{itemize}
-
+  \item<6-> \textbf{not robust}: it requires to know the form of the PDF!
  \end{itemize}
+ 
+ \uncover<7->{NB: invariance is an important and convenient property!}
 
 \end{frame}
 
 \begin{frame}
  \frametitle{Variance of the MLE}
  
+
+ Because of asymptotic minimum variance bound:
  $$V(\hat{\theta}_{ML}) \xrightarrow[N\to\infty]{} \frac{1}{N} \left[ \left.-E\left(\frac{\partial^2\ln f(x;\theta)}{\partial \theta^2}\right)\right|_{\theta=\theta_0} \right]^{-1} \approx \frac{1}{D_2(\theta=\hat{\theta}_{ML})}$$
  
  \vspace{20pt}
@@ -355,17 +408,71 @@
  
  $$\ln\mathcal{L}(\theta) = \ln\mathcal{L}(\hat{\theta}_\text{ML}) - s^2/2$$
  
+ \uncover<2>{NB: $\ln(\mathcal{L}(\theta))$ can always be made parabolic through a change of variable, without changing the MLE, thanks to invariance.}
 \end{frame}
+
+\begin{frame}
+ \frametitle{MLE: illustration for Gaussian data (unknown $\mu$, known $\sigma$)}
+ 
+%  Plot $-\ln\mathcal{L}$, analytically, in 2 cases: a) Gaus, b) Poisson
+
+ $$\mathcal{L}(\mu) = \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
+ 
+ $$-2\ln(\mathcal{L}(\mu)) = \frac{(x-\mu)^2}{\sigma^2} + \text{constant}$$
+ 
+ \mynote{Jupyter here}
+\end{frame}
+
+\begin{frame}
+ \frametitle{MLE: illustration for Poisson data}
+ 
+ \mynote{Exercise}
+ 
+ $$\mathcal{L}(\mu) = \mu^N \frac{e^{-\mu}}{N!}$$
+ 
+ $$-2\ln(\mathcal{L}(\mu)) = -2 \times \left(N \times \ln \mu - \mu \right) + \text{constant} $$
+ 
+ \begin{exampleblock}{}
+  \begin{itemize}
+   \item What is the MLE?
+   \item What is the variance of the MLE? How does it compare to the minimum variance bound?
+%    \item Compare to the value of $\mu$ such that $$-2 \times \ln\mathcal{L}(\theta) = -2\times\ln\mathcal{L}(\hat{\theta}_\text{ML}) +1$$
+  \end{itemize}
+
+ \end{exampleblock}
+ 
+ \mynote{Jupyter here, + solving in the blackboard. $I_N(\mu) = E(-\frac{\partial^2}{\partial\mu^2} \ln \mathcal{L}(\mu|N)) = E(N/\mu^2) = 1/\mu$}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{MLE: likelihood scans}
+ 
+ From the CMS Higgs boson mass measurement (\href{http://cms-results.web.cern.ch/cms-results/public-results/publications/HIG-14-009/index.html}{EPJC 75 (2015) 212}):
+ 
+ \begin{center}
+  \includegraphics[width=0.7\textwidth]{CMS-HIG-14-009_Figure_002-a}
+ \end{center}
+
+\end{frame}
+
+
 
 \begin{frame}
  \frametitle{(Academic) example of a poor MLE}
  
- One observed $N$ events $X_i$ from a uniform distribution in $[0,\theta]$, where $\theta$ is \textbf{unknown}. 
+ \mynote{Exercise}
  
+ \begin{exampleblock}{}
+  A random variable $X$ is uniformly distributed on the interval $[0,\theta]$. $N$ indpendent trials $\{x_i\}$ are drawn. What is the MLE? Can you think of a better estimate?
+ \end{exampleblock}
+ 
+ \uncover<2->{
  \begin{itemize}
   \item The likelihood function is $\mathcal{L} = \prod_{i=1}^N \theta^{-1} = \theta^{-N}$ and the MLE is $\hat{\theta} = \max\{X_i\}$.
-  \item The MLE is biased (always to small by definition)... intuitively $\hat{\theta}_{CS} = \max\{X_i\} + \max\{X_i\}/N$ is a better estimate.
+  \item<3-> The MLE is biased (always too small by definition)... intuitively $\hat{\theta}_{CS} = \max\{X_i\} + \max\{X_i\}/N$ is a better estimate.
  \end{itemize}
+ }
 \end{frame}
 
 \begin{frame}
@@ -379,7 +486,7 @@
 
 
 
-\section{Least squares method}
+\subsection{Least squares method}
 
 \begin{frame}
  \frametitle{Outline}
@@ -394,6 +501,7 @@
  
  $E(x_i;\vec{\theta})$ is a  and $V_{ij}$ ($i,j = 1\dots N$) are \textbf{known functions} of $\vec{\theta}$
  
+ \myhide{
  \begin{block}{Least squares estimator}
  The estimator is the value $\vec{\theta}$ such that $Q$ is minimum:
  
@@ -401,22 +509,26 @@
   
   $$Q = \sum_{i=1}^N \sum_{j=1}^N \left[ X_i - E(X_i;\vec{\theta})\right] V^{-1}_{ij} \left[ X_j - E(X_j;\vec{\theta})\right]$$
  \end{block}
+ }
  
+ \uncover<2>{
  This estimator is:
  
  \begin{itemize}
-  \item consistent
-  \item (generally) biased
-  \item non-optimal
+  \item \textbf{consistent}
+  \item (generally) \textbf{biased}
+  \item \textbf{non-optimal}
  \end{itemize}
-
+}
 
 \end{frame}
 
 \begin{frame}
  \frametitle{Gaussian case}
  
- In the Gaussian case, the least squares and maximum likelihood methods coincide. Assuming $N$ independent measurements $y_i$ at known points $x_i$, Gaussian distributed with mean
+ In the Gaussian case, the least squares and maximum likelihood methods coincide. 
+ 
+ Assuming $N$ independent measurements $y_i$ at known points $x_i$, Gaussian distributed with mean
  $\mu(x_i;\theta)$ and known variance $\sigma_i^2$:
  
  $$\chi^2(\theta) = -2\ln\mathcal{L}(\theta) + \text{constant} = \sum_{i=1}^N \frac{\left(X_i - \mu(\theta)\right)^2}{\sigma_i^2}$$
@@ -426,17 +538,20 @@
 \begin{frame}
  \frametitle{$\chi^2$ estimator: uncorrelated case}
  
+ \myhide{
  Uncorrelated case: $V_{ij} = 0 $ for $i \neq j$
  
- $$Q = \sum_{i=1}^N \frac{\left(x_i - E(x_i; \vec{\theta})\right)^2}{\sigma_i^2(\vec{\theta})}$$
+ $$Q = \sum_{i=1}^N \frac{\left(x_i - E(x_i; \vec{\theta})\right)^2}{\sigma_i^2(\vec{\theta})}$$}
 \end{frame}
 
 \begin{frame}
  \frametitle{Variance of the $\chi^2$ estimator}
  
+ \myhide{
  If $\theta \in \mathbb{R}$:
  
  $$V(\hat{\theta}_{LS}) \xrightarrow[N\to\infty]{} 2\left(\left.\frac{\partial^2 Q}{\partial\theta^2}\right|_{\theta=\theta_0}\right)^{-1} \approx \frac{2}{D_2(\theta=\hat{\theta}_{LS})}$$
+ }
 \end{frame}
 
 
@@ -444,17 +559,22 @@
  \frametitle{Specific cases of the $\chi^2$ estimator}
  
  \begin{block}{Linear case}
-  If $\sigma_i$ are independent of $\theta$, and $E(x_k;\theta)$ linear function of $\theta$: $Q$ is optimal and convergent
+  If \structure{$\sigma_i$ are independent of $\theta$, and $E(x_k;\theta)$ linear function of $\theta$}: $Q$ is \textbf{optimal} and \textbf{convergent}.
  \end{block}
  
+ \uncover<2->{
  \begin{block}{Gaussian case}
-  If the $x_i$ follow a normal law $G(X_i;\mu_i,\sigma_i)$: $Q$ follows a $\chi^2$ law, $\chi^2(Q;N)$:
+ 
+ \begin{itemize}
+  \item If \structure{the $x_i$ follow a normal law $G(X_i;\mu_i,\sigma_i)$}: $Q$ follows a $\chi^2$ law, $\chi^2(Q;N)$:
   
   $$\chi^2(\vec{\theta}) = \sum_{i=1}^N \frac{\left( X_i - \mu_i (\vec{\theta})\right)^2}{\sigma_i^2 (\vec{\theta})}$$
+  \item<3>If in addition \structure{the model is linear ($\sigma_i$ independent of $\theta$)}: $\chi^2_\text{min} = \chi^2 (\chi^2_\text{min};N-r)$ (with $r$ the dimension of $\vec{\theta}$), and $\vec{\theta}_{LS}$ follows a normal law of dimension $r$ with $\langle \hat{\theta}_{LS}\rangle = \vec{\theta}_0$, $V = 2 D_2^{-1}$
   
-  If in addition the model is linear ($\sigma_i$ independent of $\theta$): $\chi^2_\text{min} = \chi^2 (\chi^2_\text{min};N-r)$ (with $r$ the dimension of $\vec{\theta}$), and $\vec{\theta}_{LS}$ follows a normal law of dimesion $r$ with $\langle \hat{\theta}_{LS}\rangle = \vec{\theta}_0$, $V = 2 D_2^{-1}$
+  $N-r$ is \textbf{the number of degrees of freedom}.
+ \end{itemize}
   
- \end{block}
+ \end{block}}
 
 
 \end{frame}
@@ -468,11 +588,24 @@
 \end{frame}
 
 \begin{frame}
- \frametitle{}
+ \frametitle{Histograms}
  
  Let's assume an histogram with $N$ uncorrelated bins (the total number of events is not fixed): $d_i$ events in bin $i$, with $i = 1 \dots N$. The $d_i$ follow Poisson laws: $E(d_i;\theta) = f_i(\theta)$,
  $\sigma^2(d_i;\theta) = f_i(\theta)$.
  
+ \vspace{10pt}
+ 
+ \begin{center}
+  \includegraphics[width=0.8\textwidth]{histo}
+ \end{center}
+
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{Usual methods for fitting histograms}
+ 
+ \myhide{
  \begin{block}{Minimum $\chi^2$ method (expected uncertainties)} 
  \vspace{-7pt}
   $$Q_P = \sum_{i=1}^N = \frac{\left(d_i - f_i\right)^2}{f_i^2}$$
@@ -487,22 +620,22 @@
  
  \begin{block}{Binned likelihood (multinomial data)}
  \vspace{-7pt}
-  $$\ln \lambda = - \sum_{i=1}^N d_i \ln (d_i/f_i)$$
+  $$\ln \lambda = - \sum_{i=1}^N d_i \ln (d_i/f_i) = \sum_{i=1}^N d_i \ln (f_i) + \text{constant}$$
   \vspace{-7pt}
  \end{block}
 
 \begin{block}{Binned likelihood (Poisson data)}
 \vspace{-7pt}
-  $$\ln \lambda = - \sum_{i=1}^N f_i - d_i + d_i \ln (d_i/f_i)$$
+  $$\ln \lambda = - \sum_{i=1}^N f_i - d_i + d_i \ln (d_i/f_i) = - \sum_{i=1}^N f_i - d_i \ln (f_i) + \text{constant}$$
   \vspace{-7pt}
- \end{block}
+ \end{block}}
 
 \end{frame}
 
 \begin{frame}
  \frametitle{}
  
- The three methods are asymptotically equivalent. The binned likelihood method converges faster (and the modified $\chi^2$ is the slowest), and is less sensitive to empty bins. 
+ All methods are asymptotically equivalent. The binned likelihood method converges faster (and the modified $\chi^2$ is the slowest), and is less sensitive to empty bins. 
 \end{frame}
 
 \section{Some basic estimators}
@@ -517,28 +650,37 @@
 \begin{frame}
  \frametitle{Sample mean}
  
- $$\bar{X} = \sum_{i=1}^N \frac{x_i}{N} = \bar{mu}$$
+ \mynote{Écrire d'abord au tableau}
  
- This estimator is unbiased, thanks to the central limit theorem.
+ \uncover<2>{
+ $$\bar{X} = \sum_{i=1}^N \frac{x_i}{N} = \bar{\mu}$$
+ 
+ This estimator is \textbf{unbiased}, thanks to the central limit theorem.
  
  Its variance is:
  
  $$V(\hat{\mu}) = \frac{\sigma^2}{N},\qquad\text{i.e.}\quad \sigma(\hat{\mu}) = \frac{\mu}{\sqrt{N}}$$
  
- The sample mean is an efficient estimator of the mean of a Gaussian, but not in the general case.
+ The sample mean is an \textbf{efficient estimator} of the mean of a Gaussian, but not in the general case.
+ }
 \end{frame}
 
 \begin{frame}
  \frametitle{Variance estimator: known mean}
  
+ \mynote{Écrire d'abord au tableau}
+ 
+ \uncover<2>{
  $$\hat{V}_\mu = \frac{1}{N} \sum_{i=1}^N (x_i-\mu)^2$$
  
- This estimator is consistent and unbiased: $\langle \hat{V}_\mu \rangle = \frac{N\langle (x-\mu)^2 \rangle}{N} = V$
+ This estimator is \textbf{consistent and unbiased}: $\langle \hat{V}_\mu \rangle = \frac{N\langle (x-\mu)^2 \rangle}{N} = V$
+ }
 \end{frame}
 
 \begin{frame}
  \frametitle{Variance estimator: unknown mean}
  
+ \myhide{
  Using $\hat{\mu} = \bar{X}$
  
  $$\hat{V}_b = \frac{1}{N} \sum_{i=1}^N (x_i-\bar{X})^2 = \frac{1}{N} \sum_{i=1}^N (x_i^2 - \bar{X}^2)$$
@@ -551,12 +693,15 @@
   & = & \left( 1 - \frac{1}{N} \right) V(X)\quad \neq V(X) \nonumber
  \end{eqnarray}
  
- This estimator is biased! $\rightarrow$ Bessel correction
+ This estimator is biased! $\rightarrow$ \textbf{Bessel correction}
+ }
 
 \end{frame}
 
 \begin{frame}
  \frametitle{Variance estimator: unknown mean}
+ 
+ \mynote{Écrire d'abord au tableau}
 
  \begin{block}{}
   $$\hat{V} = \frac{1}{N-1} \sum_{i=1}^N (x_i - \bar{X})^2$$
@@ -576,33 +721,93 @@
 
 \begin{frame}
  \frametitle{Choice of estimator}
- How to choose an estimator? It should have the following properties:
+ \structure{How to choose an estimator?} It should have the following properties:
  
  \begin{itemize}
-  \item Consistency and unbiasedness
-  \item Minimum loss of information
-  \item Minimum variance (efficient estimator)
-  \item Robustness
-  \item Simplicity (e.g. if possible normally distributed, etc.)
-  \item Minimum computer time
-  \item Minimum loss of physicist's time
+  \item<2-> Consistency and unbiasedness
+  \item<3-> Minimum loss of information
+  \item<4-> Minimum variance (efficient estimator)
+  \item<5-> Robustness
+  \item<6-> Simplicity (e.g. if possible normally distributed, etc.)
+  \item<7-> Minimum computer time
+  \item<8-> Minimum loss of physicist's time
  \end{itemize}
 
 \end{frame}
 
-\subsection{More realistic cases}
+\begin{frame}
+ \frametitle{Monte-Carlo (``toy'') studies}
+ 
+ \begin{block}{}
+  Monte-Carlo studies: directly related to the frequentist paradigm (simulate experiment many times to estimate pdf)
+ \end{block}
+
+ 
+It is possible to write simple, short, fast Monte Carlo programs
+that generate data for fitting.   Can then look at fit values, 
+uncertainties, and pulls.  These are often called “toy” Monte 
+Carlos to differentiate them from complicated event and detector
+simulation programs.
+
+\begin{itemize}
+ \item Tests likelihood function.
+ \item Tests for bias.
+ \item Tests that uncertainty from fit is correct.
+\end{itemize}
+
+\uncover<2>{
+This does NOT test the correctness of the model of the data.  For 
+example, if you think that some data is 
+Gaussian 
+distributed, but 
+it is really 
+Lorentzian, then the simple Monte Carlo test will not reveal this.}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Simple Monte Carlo}
+ 
+ \begin{exampleblock}{Exercise}
+  \begin{itemize}
+   \item Generate exponential ($\tau_0=0.5$ and $N=1000$)
+   \item Find MLE
+   \item Repeat many times (e.g. 1000 times)
+   \item Plot $\hat{\tau}$%, $\sigma(\hat{\tau})$, pulls ($= (\hat{\tau}-\tau_0)/\sigma(\hat{\tau})$) in histograms
+   \item Repeat for other estimators, especially binned
+  \end{itemize}
+ \end{exampleblock}
+
+\end{frame}
+
+
+
+% \subsection{More realistic cases}
 
 % cf Fred James + PDG stat review
 
 \begin{frame}
  \frametitle{Extended likelihood}
  
+ \myhide{
  In many cases the number of events $n$ is not fixed: this dependence should be included in the likelihood: this is called the extended likelihood.
  
  $$\mathcal{L}(\vec{\theta}) = \frac{\mu^n}{n!}e^{-\mu} \prod_{i=1}^{n} f(x_i | \vec{\theta})$$
  
  $\mu$ sometimes depends on $\vec{\theta}$ itself, providing additional information.
+ }
 \end{frame}
+
+\begin{frame}
+ \frametitle{Extended likelihood: illustration}
+ 
+ \FrameText{\href{http://lhcbproject.web.cern.ch/lhcbproject/Publications/LHCbProjectPublic/LHCb-PAPER-2016-020.html}{JHEP 1609 (2016) 153}}
+ 
+ \begin{center}
+  \includegraphics[width=0.7\textwidth]{fig1a}
+ \end{center}
+
+\end{frame}
+
 
 \begin{frame}
  \frametitle{Nuisance parameters}
@@ -619,24 +824,40 @@
 \end{frame}
 
 \begin{frame}
+ \frametitle{Nuisance parameters}
+ 
+ \centering
+ \includegraphics[width=0.9\textwidth]{ATLAS_WW_ex1.png}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Nuisance parameters}
+ 
+ \centering
+ \includegraphics[width=0.9\textwidth]{ATLAS_WW_ex2.png}
+\end{frame}
+
+\begin{frame}
  \frametitle{Nuisance parameters in practice}
  
  It is often useful to ``constrain'' the nuisance parameters if possible:
  
- 
+ \uncover<2->{
  \begin{block}{Using prior knowledge}
   Assume that we know the pdf for $\vec{\nu}$: $P_{\vec{\nu}}$. Then the likelihood becomes:
   
  $$\mathcal{L}(\vec{\theta},\vec{\nu}) = P_x(\vec{x}|\vec{\theta},\vec{\nu}) P_y(\vec{y}|\vec{\nu})$$ 
  \end{block}
+ }
  
+ \uncover<3->{
  \begin{block}{Using auxiliary data}
  Assume that we have $\vec{y}$ measurements, statistically independent from $\vec{x}$, and described by a model $P_y(\vec{y}|\vec{\nu})$. Then:
  
   $$\mathcal{L}(\vec{\theta},\vec{\nu}) = P_x(\vec{x}|\vec{\theta},\vec{\nu}) P_y(\vec{y}|\vec{\nu})$$
  \end{block}
 
- Technical note: if one wants to simulate the experiment with Monte Carlo, $\vec{x}$ and $\vec{y}$ must be generated under assumption of \textbf{fixed} values for $\vec{\theta}$ and $\vec{\nu}$.
+ Technical note: if one wants to simulate the experiment with Monte Carlo, $\vec{x}$ and $\vec{y}$ must be generated under assumption of \textbf{fixed} values for $\vec{\theta}$ and $\vec{\nu}$.}
 \end{frame}
 
 \begin{frame}
@@ -649,6 +870,19 @@
  where $\hat{\hat{\vec{\nu}}}(\vec{\theta})$ is the value of $\vec{\nu}$
  the maximises the likelihood for a given value of $\vec{\theta}$. We'll come back to profile likelihood later.
 \end{frame}
+
+\begin{frame}
+ \frametitle{Profile likelihood scan}
+ \FrameText{\href{http://cms-results.web.cern.ch/cms-results/public-results/publications/HIG-16-042/index.html}{arXiv:1806.05246}}
+ 
+ \begin{center}
+  \includegraphics[width=0.8\textwidth]{CMS-HIG-16-042_Figure_008}
+ \end{center}
+ 
+ ``stat only'' means nuisance parameters fixed to their expected value (conditional PDF), the other curve is the \textbf{profile likelihood scan}.
+
+\end{frame}
+
 
 \section{Bayesian inference}
 
