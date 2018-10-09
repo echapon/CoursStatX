@@ -28,8 +28,10 @@
   Draw conclusions on the request on the performance of the detector.
   \item A random variable $X$ is uniformly distributed on the interval $[0,a]$. $N$ independent trials $\{x_i\}$ are drawn. We set $y = \max\{x_i\}$. What is the pdf for $y$?
   \item Given two indpendent random variables $X$ and $Y$, with positive values and pdfs $e^{-x}$ and $e^{-y}$ respectively, determine the pdf of the sum $s = x+y$.
-  \item Ratio of random variables. Consider two independent random variables $X$ and $Y$, with Gaussian distributions $G(\mu_X,\sigma_X)$ and $G(\mu_Y,\sigma_Y)$ respectively. Determine
-  the pdf of $Z = X/Y$. What are its mean and variance? Repeat the exercice assuming Poisson pdfs: $X$ with mean $\mu_X$, $Y$ with mean $\mu_Y$.
+%   \item Ratio of random variables. Consider two independent random variables $X$ and $Y$, with Gaussian distributions $G(\mu_X,\sigma_X)$ and $G(\mu_Y,\sigma_Y)$ respectively. Determine
+%   the pdf of $Z = X/Y$. What are its mean and variance? Repeat the exercice assuming Poisson pdfs: $X$ with mean $\mu_X$, $Y$ with mean $\mu_Y$.
+% Way too complicated... but can be studied with toys.
+% refs: https://twiki.cern.ch/twiki/bin/view/CMS/RatioOfGaussians, https://twiki.cern.ch/twiki/bin/view/CMS/RatioConfidenceIntervals, https://indico.cern.ch/event/624525/attachments/1429698/2196116/cousins_ratio_poisson_means_20mar2017.pdf, https://doi.org/10.1016/0550-3213(80)90179-0
   \item Generate an exponentially distributed variable using a uniform random number generator.
   \item $X$ and $Y$ are two independent variables following a standardized normal distribution $G(0,1)$. Determine the pdf for the polar coordinates $r$ and $\theta$.\\
   Corollary: generate two variables with a Gaussian distribution from two independent variables with a uniform distribution.
@@ -43,7 +45,7 @@
    \item when the total number of events $N=F+B$ is fixed (note that this also corresponds to the case of an efficiency, $\epsilon = \frac{N_\text{pass}}{N_\text{total}}$, with $N_\text{total}$ fixed);
    \item when the total number of events is not fixed.
   \end{enumerate}
-  \item Determine the distribution of the number of electrons at each dynode of a photomultiplier.
+%   \item Determine the distribution of the number of electrons at each dynode of a photomultiplier.
   \item Consider a random variable $X$ distributed according to an exponential law: $f(x) = \frac{1}{\tau} e^{-x/\tau}\,(x>0)$. Use $N$ independent trials $\{x_i\}$ to estimate the 
   parameter $\tau$ with the method of moments and with the maximum likelihood method.
   \item Let $X$ be a random variable with pdf 
@@ -53,10 +55,10 @@
    \end{cases}$$
    where $\theta$ is a positive parameter. Use a sample of independent trials $\{x_1, \dots, x_N\}$ to estimate $\theta$. Construct the maximum likelihood estimator and study its properties.
    \item A random variable $X$ is uniformly distributed on the interval $[0,a]$. $n$ indpendent trials $\{x_i\}$ are drawn. Use them to estimate $a$.
-   \item Draw a sample $\{x_1, \dots, x_N\}$ of $N$ independent measurements from a variable $X$ following a normal distribution with unknowm mean $m$ and known standard deviation $\sigma=1$. Use this sample to choose between the two hypotheses $H_0:\,m=1$ and $H_1:\,m=1.5$. Determine the critical region of the Neyman-Pearson test and compute its power when
-   $N=25$ and $\alpha=0.05$. What is the minimum required samples size to have a contamination smaller than 0.1?
-   \item Two forms of silicon dioxide (Barlow s.8.1.5). The density of opal is 2.2\,g/cm$^3$, that of quartz is 2.6\,g/cm$^3$. Various sites produce small quantities of crystals which 
-   could be either: their density is measurable with a resolution of 0.2\,g/cm$^3$. Which sites are worth the trouble and expenses of further excavation?
+%    \item Draw a sample $\{x_1, \dots, x_N\}$ of $N$ independent measurements from a variable $X$ following a normal distribution with unknowm mean $m$ and known standard deviation $\sigma=1$. Use this sample to choose between the two hypotheses $H_0:\,m=1$ and $H_1:\,m=1.5$. Determine the critical region of the Neyman-Pearson test and compute its power when
+%    $N=25$ and $\alpha=0.05$. What is the minimum required samples size to have a contamination smaller than 0.1?
+%    \item Two forms of silicon dioxide (Barlow s.8.1.5). The density of opal is 2.2\,g/cm$^3$, that of quartz is 2.6\,g/cm$^3$. Various sites produce small quantities of crystals which 
+%    could be either: their density is measurable with a resolution of 0.2\,g/cm$^3$. Which sites are worth the trouble and expenses of further excavation?
  \end{enumerate}
 
 \end{document}
