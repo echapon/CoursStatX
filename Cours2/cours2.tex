@@ -39,8 +39,8 @@
 \mynotefalse
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newif\ifmyhide
-\myhidetrue
-% \myhidefalse
+% \myhidetrue
+\myhidefalse
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcommand\mynote[1]{%
@@ -764,20 +764,20 @@ it is really
 Lorentzian, then the simple Monte Carlo test will not reveal this.}
 \end{frame}
 
-\begin{frame}
- \frametitle{Simple Monte Carlo}
- 
- \begin{exampleblock}{Exercise}
-  \begin{itemize}
-   \item Generate exponential ($\tau_0=0.5$ and $N=1000$)
-   \item Find MLE
-   \item Repeat many times (e.g. 1000 times)
-   \item Plot $\hat{\tau}$%, $\sigma(\hat{\tau})$, pulls ($= (\hat{\tau}-\tau_0)/\sigma(\hat{\tau})$) in histograms
-   \item Repeat for other estimators, especially binned
-  \end{itemize}
- \end{exampleblock}
-
-\end{frame}
+% \begin{frame}
+%  \frametitle{Simple Monte Carlo}
+%  
+%  \begin{exampleblock}{Exercise}
+%   \begin{itemize}
+%    \item Generate exponential ($\tau_0=0.5$ and $N=1000$)
+%    \item Find MLE
+%    \item Repeat many times (e.g. 1000 times)
+%    \item Plot $\hat{\tau}$%, $\sigma(\hat{\tau})$, pulls ($= (\hat{\tau}-\tau_0)/\sigma(\hat{\tau})$) in histograms
+%    \item Repeat for other estimators, especially binned
+%   \end{itemize}
+%  \end{exampleblock}
+% 
+% \end{frame}
 
 
 
@@ -788,13 +788,11 @@ Lorentzian, then the simple Monte Carlo test will not reveal this.}
 \begin{frame}
  \frametitle{Extended likelihood}
  
- \myhide{
  In many cases the number of events $n$ is not fixed: this dependence should be included in the likelihood: this is called the extended likelihood.
  
- $$\mathcal{L}(\vec{\theta}) = \frac{\mu^n}{n!}e^{-\mu} \prod_{i=1}^{n} f(x_i | \vec{\theta})$$
+ \myhide{$$\mathcal{L}(\vec{\theta}) = \structure{\frac{\mu^n}{n!}e^{-\mu}} \prod_{i=1}^{n} f(x_i | \vec{\theta})$$}
  
  $\mu$ sometimes depends on $\vec{\theta}$ itself, providing additional information.
- }
 \end{frame}
 
 \begin{frame}
@@ -846,7 +844,7 @@ Lorentzian, then the simple Monte Carlo test will not reveal this.}
  \begin{block}{Using prior knowledge}
   Assume that we know the pdf for $\vec{\nu}$: $P_{\vec{\nu}}$. Then the likelihood becomes:
   
- $$\mathcal{L}(\vec{\theta},\vec{\nu}) = P_x(\vec{x}|\vec{\theta},\vec{\nu}) P_y(\vec{y}|\vec{\nu})$$ 
+ \myhide{$$\mathcal{L}(\vec{\theta},\vec{\nu}) = P_x(\vec{x}|\vec{\theta},\vec{\nu}) P_{\vec{\nu}}(\vec{\nu})$$ }
  \end{block}
  }
  
@@ -854,10 +852,10 @@ Lorentzian, then the simple Monte Carlo test will not reveal this.}
  \begin{block}{Using auxiliary data}
  Assume that we have $\vec{y}$ measurements, statistically independent from $\vec{x}$, and described by a model $P_y(\vec{y}|\vec{\nu})$. Then:
  
-  $$\mathcal{L}(\vec{\theta},\vec{\nu}) = P_x(\vec{x}|\vec{\theta},\vec{\nu}) P_y(\vec{y}|\vec{\nu})$$
+  \myhide{$$\mathcal{L}(\vec{\theta},\vec{\nu}) = P_x(\vec{x}|\vec{\theta},\vec{\nu}) P_y(\vec{y}|\vec{\nu})$$}
  \end{block}
 
- Technical note: if one wants to simulate the experiment with Monte Carlo, $\vec{x}$ and $\vec{y}$ must be generated under assumption of \textbf{fixed} values for $\vec{\theta}$ and $\vec{\nu}$.}
+ Technical note: if one wants to simulate the experiment with Monte Carlo, $\vec{x}$ and $\vec{y}$ must be generated under assumption of \textbf{fixed} values for $\vec{\theta}$ and $\vec{\nu}$. (Do not vary $\vec{\theta}$ and $\vec{\nu}$ for each toy!)}
 \end{frame}
 
 \begin{frame}
@@ -865,7 +863,7 @@ Lorentzian, then the simple Monte Carlo test will not reveal this.}
  
  It is useful to remove the dependence of the likelihood $\mathcal{L}(\vec{\theta},\vec{\nu})$ on the nuisance parameters $\vec{\nu}$, by defining the profile likelihood:
  
- $$\mathcal{L}_\text{p}(\vec{\theta}) = \mathcal{L}(\vec{\theta},\hat{\hat{\vec{\nu}}}(\vec{\theta})),$$
+ \myhide{$$\mathcal{L}_\text{p}(\vec{\theta}) = \mathcal{L}(\vec{\theta},\hat{\hat{\vec{\nu}}}(\vec{\theta})),$$}
  
  where $\hat{\hat{\vec{\nu}}}(\vec{\theta})$ is the value of $\vec{\nu}$
  the maximises the likelihood for a given value of $\vec{\theta}$. We'll come back to profile likelihood later.
@@ -873,13 +871,15 @@ Lorentzian, then the simple Monte Carlo test will not reveal this.}
 
 \begin{frame}
  \frametitle{Profile likelihood scan}
- \FrameText{\href{http://cms-results.web.cern.ch/cms-results/public-results/publications/HIG-16-042/index.html}{arXiv:1806.05246}}
+ \FrameText{\href{http://cms-results.web.cern.ch/cms-results/public-results/publications/HIG-13-001/index.html}{EPJC 74 (2014) 3076}}
  
  \begin{center}
-  \includegraphics[width=0.8\textwidth]{CMS-HIG-16-042_Figure_008}
+ \includegraphics[width=0.44\textwidth]{CMS-HIG-13-001_Figure_019}\hfill
+  \includegraphics[width=0.55\textwidth]{CMS-HIG-13-001_Figure_022-a}
  \end{center}
  
- ``stat only'' means nuisance parameters fixed to their expected value (conditional PDF), the other curve is the \textbf{profile likelihood scan}.
+ ``stat only'' means nuisance parameters $\vec{\nu}$ fixed to their best fit value $\hat{\hat{\vec{\nu}}}(\hat{\vec{\theta}})$: $\mathcal{L}(\vec{\theta},\hat{\hat{\vec{\nu}}}(\hat{\vec{\theta}}))$ (conditional PDF),\\
+ the other curve is the \textbf{profile likelihood scan} $\mathcal{L}_\text{p}(\vec{\theta}) = \mathcal{L}(\vec{\theta},\hat{\hat{\vec{\nu}}}(\vec{\theta}))$.
 
 \end{frame}
 
@@ -892,12 +892,251 @@ Lorentzian, then the simple Monte Carlo test will not reveal this.}
  \tableofcontents[current]
 \end{frame}
 
+
 \begin{frame}
  \frametitle{Bayesian inference}
  
- cf Fred James. also mention marginalisation... to be further discussed later.
+ \mynote{Write Bayes' theorem on the black board}
+ 
+ Reminder: Bayes' theorem:
+ 
+ \uncover<2->{
+ $$\alert{p(\theta | x_0)} = \frac{\mathcal{L}(x_0|\theta) \structure{\pi(\theta)}}{\int \mathcal{L}(x_0|\theta^\prime) \structure{\pi(\theta^\prime)} \dd \theta^\prime}$$
+ 
+ Bayesian inference is about determining the posterior probability, $\alert{p(\theta | x_0)}$. We see that it depends on the choice of prior,
+ $\structure{\pi(\theta)}$. 
+ 
+ \begin{alertblock}{}
+  How to represent total lack of knowledge on the parameter(s) of interest?
+ \end{alertblock}
+ }
+ 
+ \uncover<3>{
+ \begin{block}{}
+ An intuitive (and popular) choice: \textbf{uniform prior}, by Laplace's \emph{Principle of insufficient reason} (in the absence of any other reason, all hypotheses are equally probable).
+ \end{block}
+ }
+ 
 \end{frame}
 
+\begin{frame}
+ \frametitle{The uniform prior}
+ 
+ Several issues:
+ 
+ \begin{itemize}
+  \item<1-> If one choses a uniform prior for $\theta$, then the prior for some function $g(\theta) = \tau$ is not uniform. But what is the most ``natural'' variable for which the prior should be uniform? An angle or its cosine, mass or mass squared, lifetime or decay rate...?
+  \item<2-> If the parameter range is infinite or semi-infinite, the prior over any finite range is 0...
+  \item<3-> Issues even in the discrete case: consider we wish to determine if an object is red or white: $P=1/2$ for each. However consider that we have 100 possible shades of red. 
+  Is $P(\text{white})$ now 1/101 or 1/2?
+ \end{itemize}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Jeffrey's prior}
+ 
+ Physicist Harold Jeffrey expressed \textbf{objective priors} known today as \textbf{Jeffrey's priors}, or sometimes (somewhat wrongly) \emph{uninformative} or \emph{objective} priors. 
+ They are expressed applying the principle of minimum Fisher information:
+ 
+ \myhide{1D:
+ 
+ $$\pi(\theta) = \sqrt{I(\theta)} = \sqrt{- E\left(\frac{\partial^2 \ln f(x|\theta)}{\partial \theta^2}\right)}$$
+ 
+ ND:
+ 
+ $$\pi(\vec{\theta}) = \sqrt{\det (I(\vec{\theta}))}$$
+}
+
+\uncover<2->{Note: Jeffrey's priors are designed so that \textbf{inference does not depend on the chosen metric}. In other words, if $\tau = f(\theta)$, $p(\theta|x_0)$ and $p^\prime(\tau|x_0)$ are correctly related
+by the Jacobian of the transformation.}
+
+ 
+\end{frame}
+
+\begin{frame}
+ \frametitle{Examples}
+ 
+ \mynote{Write them on the blackboard too}
+ 
+ Jeffrey's priors for some common cases:
+ 
+ \begin{itemize}
+  \item Poisson signal mean $\mu$, no background: \structure{$\pi(\mu) = 1/\sqrt{\mu}$}
+  \item<2-> Poisson signal mean $\mu$, mean background $b$: \structure{$\pi(\mu) = 1/\sqrt{\mu+b}$}
+  \item<3-> Unbounded mean of Gaussian: \structure{$\pi(\mu)=1$} (uniform)
+  \item<4-> Std. dev. of a Gaussian with fixed $\mu$: \structure{$\pi(\sigma) = 1/\sigma$}
+ \end{itemize}
+ 
+ \uncover<5>{Note: these priors are \textbf{improper} (not normalisable). This can be allowed because priors are multiplied by $\mathcal{L}$ and one can may still get a normalisable posterior density.}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{How to choose the prior?}
+ 
+ Pros and cons of Jeffrey's priors:
+ 
+ \begin{itemize}
+  \item<2-> Pro: inference does not depend on the chosen metric
+  \item<3-> Con (for lazy physicists): harder to compute than an uniform prior...
+  \item<4-> Con: violates the likelihood principle
+  \item<5-> Con: depends on the likelihood, i.e. on the experimental apparatus (ex: Poisson with background)
+  \item<6-> Con: difficult to apply for more than one parameter (solution: \textit{reference prior}, Bernardo and Berger)
+ \end{itemize}
+ 
+ \uncover<7>{
+ \textbf{What is the correct prior?}
+ 
+ There is not unique choice. Recall that Bayesian statistics is subjective by essence... However, to get meaningful results, one should check that results are insensitive
+ to the choice of prior (within some sensible range).
+ }
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Likelihood principle}
+ 
+ \begin{block}{Likelihood principle}
+  Given a measurement $x$, all the relevant information regarding $\theta$ is encoded in the likelihood $\mathcal{L}(x_0|\theta)$.
+ \end{block}
+ 
+ This is encoded in Bayesian inference (see Bayes' theorem), but generally violated in frequentist inference (which needs to also account for the probability to observe
+ other results than the one measured...), also by some of Jeffrey's priors.
+
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{Bayesian inference about the Poisson parameter}
+ 
+ $$P(n|\mu) = \frac{e^{-\mu} \mu^n}{n!}$$
+ 
+ \begin{itemize}
+  \item A flat prior would give $E(\mu) = n+1$... not good since $E(n)=\mu$
+  \item If there is background, Jeffrey's prior is $\pi(\mu) = 1/\sqrt{\mu+b}$. Depends on $b$?! Another proof that Jeffrey's prior does not reflect one's prior knowledge...
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Bayesian treatment of nuisance parameters}
+ 
+ Back to the case of parameters of interest $\vec{\theta}$ and nuisance parameters $\vec{\nu}$. 
+ 
+ One may have data $\vec{y}$ constraining $\vec{\nu}$, with likelihood $\mathcal{L}(\vec{y}|\vec{\nu})$.
+ 
+ Then one may use Bayes' theorem to obtain the posterior probability on $\vec{\nu}$: 
+ 
+ $$p(\vec{\nu}|\vec{y}) \propto \mathcal{L}(\vec{y}|\vec{\theta}) \pi(\vec{\nu})$$
+ 
+ \uncover<2>{One often lacks knowledge on $\mathcal{L}(\vec{y}|\vec{\theta})$... possibilities:
+ 
+ \begin{itemize}
+  \item Gaussian pdf (centered on nominal value, with certain standard deviation)
+  \item Log-normal or gamma pdf (better than truncated pdf if $\nu>0$ -- e.g. for multiplicative factors: efficiency, ...)
+ \end{itemize}
+}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Bayesian treatment of nuisance parameters}
+ 
+ The likelihood function, prior and posterior all depend on the nuisance parameters:
+ 
+ \myhide{$$p(\vec{\theta},\vec{\nu} | \vec{x}_0) \propto \mathcal{L}(\vec{x}_0|\vec{\theta},\vec{\nu}) \pi(\vec{\theta},\vec{\nu})$$}
+ 
+ One can obtain the posterior pdf for $\vec{\theta}$ alone by marginalising the likelihood (integrating over the nuisance parameters):
+ 
+ \myhide{\begin{eqnarray}
+          p(\vec{\theta} | \vec{x}_0) & \propto & \left(\int \mathcal{L}(\vec{x}_0|\vec{\theta},\vec{\nu}) \pi(\vec{\nu} | \vec{\theta}) \dd \vec{\nu}\right) \pi(\vec{\theta}) \nonumber \\
+           & \propto & \mathcal{L}(\vec{x}_0|\vec{\theta}) \pi(\vec{\theta}) \nonumber
+         \end{eqnarray}}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Marginalisation vs profiling}
+ 
+ Nuisance parameters in Bayesian inference are removed by \textbf{marginalisation}:
+ 
+ \begin{eqnarray}
+  p(\theta|x_0) & = & \int p(\theta,\nu|x_0) \dd\nu \nonumber \\
+  & \propto & \int \mathcal{L}(x_0|\theta,\nu)\pi(\theta)\pi(\nu)\dd\nu \nonumber
+ \end{eqnarray}
+ 
+ \uncover<2>{in contrast to \textbf{profiling}, which can be viewed as marginalization
+with the data-dependent prior $\pi(\theta,\nu) = \delta(\nu-\hat{\nu}(\theta,x_0))$
+
+\begin{eqnarray}
+  p(\theta|x_0) & \propto & \int \mathcal{L}(x_0|\theta,\nu)\pi(\theta,\nu)\dd\nu \nonumber\\
+  & \propto & \int \mathcal{L}(x_0|\theta,\nu)\pi(\theta)\delta(\nu-\hat{\nu}(\theta,x_0))\dd\nu \nonumber\\
+  & \propto & \mathcal{L}(x_0 | \theta,\hat{\nu}(\theta))\nonumber
+ \end{eqnarray}
+}
+ 
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{Marginalisation and numerical integration}
+ 
+ The integrals involved in marginalisation are often very complex and over a many-dimension space.
+ 
+ Integration may be difficult with standard Monte-Carlo methods:
+ 
+ \begin{itemize}
+  \item transformation method not possible (requires inversion of the cumulative function)
+  \item hit-and-miss method too inefficient
+ \end{itemize}
+
+ 
+ \uncover<2>{$\rightarrow$ \textbf{Markov Chain Monte-Carlo (MCMC)}\footnote{\uncover<2>{Note: MCMC is frequently used as a tool in Bayesian statistics but is not Bayesian by itself.}}: Markov chain following a pdf proportional to a desired function $\pi(\vec{\theta})$. $\pi(\vec{\theta})$ does not have to be normalised!
+ 
+ One samples $(\vec{\theta},\vec{\nu})$ from $\pi(\vec{\theta},\vec{\nu})$ and records the marginal distribution for $\vec{\theta}$.}
+\end{frame}
+
+\begin{frame}
+ \frametitle{MCMC: Metropolis-Hastings algorithm}
+ 
+ One starts with a proposal pdf $q(\vec{\theta},\vec{\theta}_0)$ (example: Gaussian pdf centered around $\vec{\theta}_0$). Starting at $\vec{\theta}_0$:
+ 
+ \begin{enumerate}
+  \item<2-> Generate a value $\vec{\theta}$ using the proposal density $q(\vec{\theta},\vec{\theta}_0)$
+  \item<3-> Form the Hastings test ratio, $\alpha = \min \left[ 1, \frac{\pi(\vec{\theta})q(\vec{\theta}_0,\vec{\theta})}{\pi(\vec{\theta}_0)q(\vec{\theta},\vec{\theta}_0)}\right]$
+  \item<4-> Generate $u$ uniformly in $[0,1]$
+  \item<5-> If $u \leq \alpha$, take $\vec{\theta}_1 = \vec{\theta}$. Otherwise, repeat the old point: $\vec{\theta}_1 = \vec{\theta}_0$
+  \item<6-> Set $\vec{\theta}_0 = \vec{\theta}_1$ and go back to step 1
+ \end{enumerate}
+ 
+ \uncover<7>{If $q$ is symmetric in $\vec{\theta}$ and $\vec{\theta}_0$, this is the \textit{Metropolis}-Hastings algorithm, and $\alpha = \min [ 1, \pi(\vec{\theta})/\pi(\vec{\theta}_0) ]$}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{MCMC: visualisation}
+ 
+ \centering
+ \includegraphics[width=\textwidth]{MCMC.pdf}
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{Example: cosmological parameters from Planck}
+ \FrameText{\href{http://arxiv.org/abs/arXiv:1303.5076}{AA 571 (2014) A16}}
+ 
+ \begin{figure}
+ \centering
+ \includegraphics[width=0.67\textwidth]{triangle_planckonly_vs_WMAP_6pars}
+ 
+ \caption{\tiny Comparison of the base $\Lambda$CDM model parameters for Planck+lensing only (colour-coded samples), and the 68\% and 95\%
+constraint contours adding WMAP low-$\ell$ polarization (WP; red contours), compared to WMAP-9 (Bennett et al. 2012; grey contours).
+}
+ \end{figure}
+
+ 
+ 
+ 
+\end{frame}
 
 
 \section{Data combination}
@@ -911,10 +1150,217 @@ Lorentzian, then the simple Monte Carlo test will not reveal this.}
 
 \begin{frame}
  \frametitle{Combination of data}
+ \FrameText{\href{http://cms-results.web.cern.ch/cms-results/public-results/publications/HIG-14-009/index.html}{EPJC 75 (2015) 212}, 
+ \href{https://arxiv.org/abs/1403.4427}{arXiv:1403.4427}}
  
- BLUE, etc
+ Combining data:
+ 
+ \begin{itemize}
+  \item Best is to go back to the original data (i.e. combine the full likelihoods)
+  \begin{itemize}
+   \item Includes full information, including correlations, non-Gaussianities, etc.
+   \item May be a lot of work / not possible (e.g. combining accross experiments)
+  \end{itemize}
+  \item<2-> Discussed here: combining results
+ \end{itemize}
+
+ \begin{center}
+  \includegraphics[width=0.44\textwidth]{CMS-HIG-14-009_Figure_002-a}\hfill
+  \uncover<2>{\includegraphics[width=0.55\textwidth]{mtop_combo_Fig5}}
+ \end{center}
+
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{One parameter, no correlations: weighted average}
+ 
+ 
+ Assume $N$ determinations $x_i \pm \sigma_i$ of a single physical quantity $x$. We use the least squares method:
+ 
+ \myhide{
+ $$S(x) = \sum_i \left( \frac{x-x_i}{\sigma_i} \right)^2$$
+ 
+ Minimising $S(x)$ yields 
+ 
+ $$\hat{x}_\text{comb} = \frac{\sum_i w_i  x_i}{\sum_i w_i}$$
+ 
+ where
+ 
+ $$w_i = \frac{1}{\sigma_i^2}$$
+ 
+ $\hat{x}_\text{comb}$ is the weighted average of the $x_i$. The variance of $\hat{x}_\text{comb}$ is:
+ 
+ $$\frac{1}{\sigma^2_\text{comb}} = \sum_i \frac{1}{\sigma_i^2}$$
+ }
+\end{frame}
+
+\begin{frame}
+ \frametitle{Notes on the weighted average}
+ 
+ \begin{itemize}
+  \item $\frac{1}{\sigma^2_\text{comb}} = \sum_i \frac{1}{\sigma_i^2}$: $\frac{1}{\sigma^2_\text{comb}}$ is at least as small as the smallest of the individual uncertainties.
+  \item $\frac{1}{\sigma^2_\text{comb}}$ does \textbf{not} depend on the degree of consistency of the individual measurements. Combining $0 \pm 3$ and $z \pm 3$ gives a combined
+  uncertainty of $\approx 2$, independent of whether $z$ is 1 or 7.
+  \item The method assumes a \textbf{linear} problem: it assumes that the $\sigma_i$ are independent of the $x_i$. 
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{An apparent counter-example}
+ 
+ Assume we want to combine $100 \pm 10$ and $1 \pm 1$\footnote{In real life one should not try to combine such discrepant measurements... There must be a mistake in either of them.},
+ two independent measurements of the same Poisson parameter.
+ The weighted sum gives $2 \pm 1$, which seems ridiculous. \textbf{Where is the issue?}
+ 
+ \uncover<2->{
+ Here we have estimated the \textbf{estimated} uncertainties, instead of the true ones. These observed uncertainties depend on the measured rate, and a downward fluctuation
+ artificially increases the weight in the combination.
+ 
+ Both measurements should have been given the same weight, then yielding $50.5 \pm 5$.
+ }
+ 
+ \uncover<3>{A way to overcome this is to make the procedure \textbf{iterative}, trying to approach the true uncertainty (variance) for each measurement.}
+\end{frame}
+
+\begin{frame}
+ \frametitle{General case with correlations: Best Linear Unbiased Estimate (BLUE)}
+ 
+ $N$ (unbiased) measurements $x_i$ with covariance matrix $V$
+ 
+ \begin{itemize}
+  \item \structure{Best}: smallest variance
+  \item \structure{Linear}: linear dependence on the inputs, $\hat{x}_\text{BLUE} = \sum_i w_i x_i$
+  \item \structure{Unbiased}: implies $\sum_i w_i = 1$.
+ \end{itemize}
+ 
+ The weights are obtained by minimising the variance, i.e. minimising $\sum_{i,j} w_i w_j \left(V^{-1}\right)_{ij}$:
+ 
+ $$w_i = \frac{\sum_{j} \left(V^{-1}\right)_{ij}}{\sum_{i,j} \left(V^{-1}\right)_{ij}}$$
+ 
+ This is equivalent to the least squares method, but explicitly gives the weights for each measurement in the combination.
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Correlations and extrapolation}
+ 
+ Two measurements $x_1 \pm \sigma_1$, $x_2 \pm \sigma_2$, $\sigma_1 \leq \sigma_2$, $\rho > \sigma_1 / \sigma_2$
+ 
+ In this case, \structure{$x \notin [x_1,x_2]$}: BLUE involves \textbf{extrapolation}!
+ 
+ Counterintuitive, but sensible: this is because, in the case of strongly positive correlation, it is likely that $x_1$ and $x_2$ are both on the same side of the true value.
+ 
+ \structure{Corollary}: correlations between measurements may be poorly known, but BLUE is highly sensitive to the assumptions on correlations.
+\end{frame}
+
+\begin{frame}
+ \frametitle{Correlated measurements of several physical quantities}
+ 
+ $N$ observables $X_\alpha = (X_1,\dots,X_N)$, $n$ experimental results $y_i = (y_1,\dots,y_n)$. Each $y_i$ is a measurement of a given $X_\alpha$, and all observables are measured at least
+ once: $n \geq N$. The covariance matrix of the $n$ measurements is $V$.
+ 
+ Let us define the $(n \times N)$ matrix $\mathcal{U}$: 
+ 
+ \myhide{
+ $$\mathcal{U}_{i\alpha} = \begin{cases} 
+      1 & \text{if } y_i \text{ is a measurement of } X_\alpha  \\ 
+      0 & \text{otherwise}
+   \end{cases}$$
+   
+   Then the best linear estimate of each observable $X_\alpha$ is:
+   
+   $$\hat{x}_\alpha = \sum_{i=1}^n \lambda_{\alpha i} y_i$$
+   
+   where the weights are:
+   
+   $$\lambda_{\alpha i} = \sum_{\beta=1}^N \left( \mathcal{U}^t V^{-1} \mathcal{U} \right)^{-1}_{\alpha \beta} \left(\mathcal{U}^t V^{-1} \right)_{\beta i} $$
+   
+   The covariance for the estimates is
+   
+   $$\text{cov}(\hat{x}_\alpha, \hat{x}_\beta) =\left( \mathcal{U}^t V^{-1} \mathcal{U} \right)^{-1}_{\alpha \beta} $$
+   }
+\end{frame}
+
+\begin{frame}
+ \frametitle{Example: straight line fitting}
+ 
+ Two tracking planes, each with 3 layers providing uncorrelated measurements $y_i \pm \sigma_i$. No magnetic field: one fits straight lines $y = a + bx$.
+ 
+ The first sub-detector gives $(a_1,b_1)$, the second $(a_2,b_2)$, combined into $(a_\text{comb},b_\text{comb})$
+ 
+ \includegraphics[width=\textwidth]{BLUE/fig1}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Example: straight line fitting}
+ 
+ Now the two tracking planes are on either side of the origin.
+ 
+ \includegraphics[width=\textwidth]{BLUE/fig2_ab}
 \end{frame}
 
 
+\begin{frame}
+ \frametitle{Real life example 1: determination of the fraction of dark energy in the universe, $\Omega_\Lambda$}
+ 
+ \centering
+ \includegraphics[width=0.45\textwidth]{BLUE/fig3.pdf}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Real life example 2: preliminary world top quark mass combination}
+ \FrameText{\href{https://arxiv.org/abs/1403.4427}{arXiv:1403.4427}}
+ 
+ \begin{columns}
+  \begin{column}{1.19\textwidth}
+   \includegraphics[width=0.4\textwidth]{mtop_combo_correl.png}\hfill
+ \includegraphics[width=0.19\textwidth]{mtop_combo_BLUE_coef.png}\hfill
+ \includegraphics[width=0.4\textwidth]{mtop_combo_Fig5}
+  \end{column}
+ \end{columns}
+
+ 
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{Real life example 3: Standard Model fits}
+ \FrameText{\href{http://project-gfitter.web.cern.ch/project-gfitter/}{arXiv:1803.01853}}
+ 
+ \begin{columns}
+  \begin{column}{1.15\textwidth}
+ \includegraphics[width=0.49\textwidth]{2018_03_20_Scan2D_MWvsmt_logo}\hfill
+ \includegraphics[width=0.49\textwidth]{2018_03_20_WMassScan_logo}
+ \end{column}
+ \end{columns}
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{Back to profile likelihood}
+ 
+ 
+ \hfill\includegraphics[width=0.8\textwidth]{BLUE/fig2_ab}
+ 
+ \begin{columns}
+  \begin{column}{0.55\textwidth}
+   The correct combination is obtained by going back to the full likelihoods.
+   
+   Combining profile likelihoods $\mathcal{L}_{\text{prof},1|2}(a) = \mathcal{L}_{1|2}(a,\hat{\hat{b}}(a))$ does not give correct results.
+  \end{column}
+  \begin{column}{0.37\textwidth}
+   \includegraphics[width=\textwidth]{BLUE/fig2_cd}
+  \end{column}
+ \end{columns}
+
+\end{frame}
+
+
+% \begin{frame}
+%  \frametitle{Combining $p$-values}
+% \end{frame}
+% Leave this for when I introduce p-values...
 \end{document}
 
