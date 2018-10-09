@@ -1,0 +1,158 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{ucs}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[pdftex]{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{listings}
+\usepackage{color}
+
+\usepackage[pdftex]{hyperref}
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+language=Python,
+basicstyle=\ttm,
+otherkeywords={self},             % Add keywords here
+keywordstyle=\ttb\color{deepblue},
+emph={MyClass,__init__},          % Custom highlighting
+emphstyle=\ttb\color{deepred},    % Custom highlighting style
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false            % 
+}}
+
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2][]{{
+\pythonstyle
+\lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+\title{Point estimation}
+\author{}
+\date{}
+
+\begin{document}
+ \maketitle
+ 
+ \section{Bayesian inference: Poisson}
+ 
+ We come back to the example seen in class: $W^\pm W^\pm jj$ from ATLAS (PRL 113, 141803 (2014)).
+ \begin{itemize}
+  \item $D = 12$ observed events
+  \item $B = 3.0 \pm 0.6$ background events (Poisson distributed, estimated from a control sample)
+ \end{itemize}
+
+ The unknowns are the expected background count $b$ and the expected signal count $s$. The expected event count is $d = b+s$.
+ 
+ \begin{enumerate}
+  \item Write the likelihood $\mathcal{L}(D | s,b)$.
+  \item What is the MLE $\hat{s}_\text{MLE}$? Draw the profile likelihood $-2\ln\mathcal{L}_\text{prof}(D|s)$ (e.g. using a \texttt{TGraph}, or with any other tool).
+  \item Draw the (marginalised) posterior for $s$, for each of the following priors for $s$ (and a flat prior for $b$). You will perform the marginalisation using the MCMC method, also
+  drawing the Markov chain in one of the cases. 
+  \begin{enumerate}
+   \item using a flat prior in $[0,+\infty[$
+   \item using Jeffrey's prior for a Poisson process without background
+   \item using Jeffrey's prior for a Poisson process with background?
+  \end{enumerate}
+ \end{enumerate}
+ 
+ \section{Straight line tracking}
+ 
+ \begin{center}
+  \includegraphics[width=0.5\textwidth]{../figures/BLUE/fig2_a}
+ \end{center}
+
+ We consider a tracking detector without magnetic field (particle trajectories are straight lines $y = a + bx$). The detector is made of 2 tracking stations, each with 3 layers,
+ situated at $x_{11} = 10$, $x_{12} = 11$, $x_{13} = 12$; $x_{21} = 20$, $x_{22} = 21$, $x_{23} = 22$ (distances in mm). We want to measure $a$, the impact parameter of the particle with respect to the origin, while we are not interested in $b$ (it is a ``nuisance parameter''). Each layer has a resolution of 1\,mm: in other words, each measurement $y_i$ is a random variable
+ with a Gaussian distribution of mean $a + bx_i$ and variance 1.
+ 
+ In the following we assume the true values of $a$ and $b$ to be $a_0=3$\,mm and $b_0=0.1$. The measured values are $y_{11} = 4.0$, $y_{12} = 3.8$, $y_{13} = 3.6$, $y_{21} = 5.2$, $y_{22} = 4.9$, $y_{23} = 4.8$\,mm.
+ 
+ \begin{enumerate}
+  \item Give the expression for the ML estimates $\hat{a}_\text{MLE}$ and $\hat{b}_\text{MLE}$. What is the corresponding covariance matrix? Compare the numerical value of $V(\hat{a})$
+  when only the 3 layers of the first station are used, or those of the second station, or all 3 stations.
+  \item Draw $-2\ln\mathcal{L}(a,\hat{b})$ as a function of $a$ for the 3 first layers, the 3 last layers, and the 6 layers. Draw them together with the profile likelihood 
+  $-2\ln\mathcal{L}_\text{prof}(a) = -2\ln\mathcal{L}(a,\hat{\hat{b}}(a))$. You can use \texttt{TGraph} for instance.
+  \item An independent measurement adds the information that $\langle b \rangle = 0.1$, with a precision $\sigma_b = 0.05$. How to account for this information in the likelihood?
+  Repeat the previous question (likelihood drawing) with the new likelihood.
+  \item \textbf{Bayesian estimation.} 
+  \begin{enumerate}
+    \item Assume a flat prior for $a$ and $b$. What is the posterior for $(a,b)$? What is the marginalised posterior for $a$? Give its mean and variance.
+    \item What happens if we set the prior for $a$ to be 0 for $a<0$?
+    \item Let's go back to a flat prior on $\mathbb{R}$ for $a$. How to account for $\langle b \rangle = 0.1$, $\sigma_b = 0.05$, in the prior for $b$?
+    \item \textit{Numerical application}: perform the marginalisation on $b$ using the MCMC method, with and without the additional constraint. Draw the corresponding Markov chain
+    (e.g. using a \texttt{TGraph}).
+    Use it to draw the posterior for $(a,b)$ and the marginalised posterior for $a$. You could fill histograms (\texttt{TH1F}, \texttt{TH2F}) with the Markov chain.
+  \end{enumerate}
+  \item \textbf{Data combination.} Use the BLUE method to combine the estimates $\hat{a}_\text{MLE,1}$ and $\hat{a}_\text{MLE,2}$, with two different methods:
+  \begin{enumerate}
+   \item Combining simultaneously $a$ and $b$ (correlated measurements of several physical quantities).
+   \item Combining only $a$, considering the uncertainty on $a$ coming from $b$ as correlated between the two stations.
+  \end{enumerate}
+ \end{enumerate}
+
+ \section*{Technical tools}
+ See \url{https://root.cern.ch/doc/master/}
+ \begin{itemize}
+  \item \texttt{TGraph} 
+  \begin{python}
+import ROOT
+from array import array
+x = [1,2]
+y = [3,4]
+g = ROOT.TGraph(len(x), array('d',x), array('d',y))
+c1 = ROOT.TCanvas()
+g.Draw("AL")
+c1.Draw()
+  \end{python}
+  \item \texttt{TH1F}
+  \begin{python}
+import ROOT
+h = ROOT.TH1F("h","1D histo",10,0,10)
+for i in range(0,100):
+   h.Fill(ROOT.gRandom.Uniform(10))
+
+c1 = ROOT.TCanvas()
+h.Draw()
+c1.Draw()
+  \end{python}
+  \item \texttt{TH2F}
+  \begin{python}
+import ROOT
+h2 = ROOT.TH2F("h2","2D histo",10,0,10,10,0,10)
+for i in range(0,100):
+   h2.Fill(ROOT.gRandom.Uniform(10),ROOT.gRandom.Uniform(10))
+
+c1 = ROOT.TCanvas()
+h2.Draw("COLZ")
+c1.Draw()
+  \end{python}
+ \end{itemize}
+
+\end{document}
+ 
