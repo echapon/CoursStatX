@@ -1,0 +1,130 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{ucs}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[pdftex]{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+
+\usepackage[pdftex]{hyperref}
+\usepackage{url}
+
+\title{Frequentist coverage study: intervals for a binomial parameter}
+\author{}
+\date{}
+
+\begin{document}
+ \maketitle
+ 
+ We are studying the case of a binomial law:
+ 
+ $$P(n) = B(n;N,p) = \left( ^N_n \right) p^n (1-p)^{N-n}$$
+ 
+ This corresponds to repeating an experiment $N$ times, and counting $n$ the number of times of ``sucess'', where the probability for this success is $p$. $n$ is a random variable and follows this binomial law, of parameters $N$ and $p$. One real-life example is the estimation of an efficiency: for instance, $n$ could be the number of counts in a particle detector,
+ or passing some selection, while $N$ is the total number of particles or events considered.
+ 
+ Interval estimation of the binomial parameter $p$ is a common problem, however nontrivial because the problem is discrete. There is abundant bibliography on the subject, and we will review
+ some of the most popular methods available, as well as their frequentist coverage.
+ 
+ \section{Prelude}
+ 
+ \begin{enumerate}
+  \item Show that the mean is $E(n) = pN$ and the variance $V(n) = N p (1-p)$.
+  \item What is the maximum likelihood estimate $\hat{p}$? What is its variance?
+  \item Propose a simple algorithm for generating $n$ following a binomial law $B(n;N,p)$, assuming a uniform generator between 0 and 1.
+  \item Draw the binomial distribution for $N=10$, $p=0.9$.
+ \end{enumerate}
+ 
+ \section{Interval estimation}
+ 
+ For convenience, we will use the notation 
+ 
+ $$Z_{\alpha/2} = \Phi^{-1}(1-\alpha/2) = -\Phi^{-1}(\alpha / 2)$$
+ 
+ where
+ 
+ $$\Phi(Z) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^Z \exp(-t^2 / 2) \text{d} t = \frac{1+\text{erf}(Z/\sqrt{2})}{2},$$
+ 
+ so that
+ 
+ $$Z = \sqrt{2}\, \text{erf}^{-1} (1-\alpha).$$
+ 
+ Example: $Z_{\alpha/2} = 1$ for $1-\alpha = 0.6827$.
+ 
+ \begin{enumerate}
+  \item \textbf{Wald interval} This procedure (that we will see should be avoided) simply substitutes $\hat{p}$ for $p$ in the variance of $n$, in a Gaussian approximation. Give explicitly
+  the Wald interval for any C.L.
+  \item \textbf{Wilson score interval} The Wald intervals neglect the fact that $V(\hat{p})$ depends on p. E.B. Wilson proposed in 1927 to quote the largest interval $[p_1,p_2]$ such that $p_1 + Z_{\alpha/2} \sigma(p_1) < \hat{p} < p_2-Z_{\alpha/2}\sigma(p_2)$. Give the expression for such interval.
+  \item \textbf{Agresti and Coull} These authors proposed to use the midpoint $\tilde{p}$ of the Wilson interval in the formula for the Wald interval, instead of the MLE $\hat{p}$. Give the corresponding interval.
+  \item \textbf{Clopper-Pearson} These intervals use the Neyman construction and ensure strict frequentist coverage. The ordering rule is as follows: the lower and upper limits are constructed separately, with C.L. $(1-\alpha)/2$. 
+%   \begin{enumerate}
+    Write a function that builds the confidence belt in the $(n,p)$ plane. You may first build the lower limits, then the upper limits, and combine the two together. 
+   Draw it for $N=10$ and with a step size in $p$ of 0.01.
+%    \item The duality with hypothesis test inversion may also be used: use this method to give the C-P interval in $p$ for given $n$ and $N$. 
+%    It can be done analytically using the following identity:
+%    $$\sum_{i=n}^{N} \left(^N_i\right) p^i (1-p)^{N-i} = I_p (n,N-n+1)$$
+%    where $I_p (\alpha,\beta)$ is the regularised incomplete Beta function:
+%    $$I_p (\alpha,\beta) = \frac{\text{B}(p;\alpha,\beta)}{\text{B}(\alpha,\beta)},$$
+%    defined from the incomplete Beta function,
+%    $$\text{B} (p;\alpha,\beta)=\int _{0}^{p}t^{\alpha-1}\,(1-t)^{\beta-1}\text{d}t.$$
+%    The incomplete Beta function is available in \texttt{scipy} as \texttt{scipy.special.betainc}.
+%   \end{enumerate}
+%   \item \textbf{Feldman-Cousins} The Neyman construction is used again, this time with the likelihood ratio ordering. Write this likelihood ratio and repeat confidence belt construction
+%   as above.
+% %   \item \textbf{Lancaster mid-P} This methods aims at solving the large overcoverage of the Clopper-Pearson intervals. In the Neyman construction, this time half of the probability of the observed $n_\text{obs}$ is added to the tail of the probability. 
+%   \item \textbf{Bayesian with uniform prior} Give the posterior Bayesian probability for $p$ assuming a uniform prior, and use it to define the corresponding central interval (with equal posterior probability on both sides). It will be useful to use the Beta distribution: 
+%   $$\text{Beta}(p;\alpha,\beta) = \frac{1}{B(\alpha,\beta)} p^{\alpha-1} (1-p)^{\beta-1}.$$
+%   \item \textbf{Bayesian with Jeffreys' prior} Show that Jeffreys' prior for $p$ is proportional to $1/\sqrt{p(1-p)}$. Give the Bayesian posterior probability and the corresponding central interval with this prior.
+ \end{enumerate}
+
+ \subsection{Comparison of the intervals in particular cases}
+ 
+ Compare the intervals on $p$ from the above methods, in the following cases:
+ 
+ \begin{itemize}
+ \item $N=10$, $n=10$
+  \item $N=10$, $n=9$
+  \item $N=10$, $n=5$
+  \item $N=100$, $n=90$
+ \end{itemize}
+
+ 
+ \section{Study of frequentist coverage properties of various types of intervals}
+ 
+ For each of the intervals above, study the frequentist properties of the interval estimation for $p$. In practice this is done in the following way:
+ \begin{itemize}
+  \item Fix the true value of the parameters $p$ and $N$;
+  \item Generate $n$ according to $B(n;N,p)$;
+  \item Compute the interval knowing $n$ and $N$;
+  \item Check if the true value of $p$ is in this interval;
+  \item Repat $N_\text{trials}$ times (e.g. 1000 times);
+  \item Report the fraction of times that the true value of $p$ was inside the interval, and compare to the target confidence level (C.L.).
+ \end{itemize}
+
+ We will study 68.27\% C.L. intervals, in 3 ways:
+ 
+ \begin{enumerate}
+  \item set $N=10$ and check coverage as a function of $p$ for $0 \leq p \leq 1$
+  \item make a 2-dimensional plot of coverage as a function of $p$ and $N$, for $0 \leq p \leq 1$ and $2 \leq N \leq 20$
+  \item average the previous plot over all values of $p$, to get the average coverage as a function of $N$.
+ \end{enumerate}
+
+ \begin{thebibliography}{9}
+  \bibitem{Cousins:2009kz}
+  R.~D.~Cousins, K.~E.~Hymes and J.~Tucker,
+  %``Frequentist evaluation of intervals estimated for a binomial parameter and for the ratio of Poisson means,''
+  Nucl.\ Instrum.\ Meth.\ A {\bf 612} (2010) 388
+  doi:10.1016/j.nima.2009.10.156
+  [arXiv:0905.3831 [physics.data-an]].
+  %%CITATION = doi:10.1016/j.nima.2009.10.156;%%
+  %19 citations counted in INSPIRE as of 14 Nov 2018
+  \bibitem{root} \texttt{TEfficiency} class documentation, \url{https://root.cern.ch/doc/master/classTEfficiency.html}.
+ \end{thebibliography}
+
+
+\end{document}
+ 
